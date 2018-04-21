@@ -1,4 +1,4 @@
-=== Custom Related Products for WooCommerce ===
+=== WooCommerce Related Products ===
 Contributors: scottnelle
 Donate link: https://www.paypal.me/scottnelle
 Tags: woocommerce, related products
