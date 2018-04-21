@@ -1,0 +1,1 @@
+wc-related-products
