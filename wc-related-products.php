@@ -44,9 +44,11 @@ class WC_Related_Products {
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], 15 );
+
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
-		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 10, 1 );
+		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 15 );
 		add_action( 'woocommerce_process_product_meta', [ $this, 'wc_rp_save_related_products' ], 10, 2 );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
 		add_filter( 'woocommerce_product_related_posts_relate_by_category', [ $this, 'wc_rp_taxonomy_rel', ], 10, 2 );
@@ -244,6 +246,7 @@ class WC_Related_Products {
 	public function wc_rp_filter_related_products( $query, $product_id ) {
 		$related_ids = get_post_meta( $product_id, '_related_ids', true );
 		if ( ! empty( $related_ids ) && is_array( $related_ids ) ) {
+
 			$related_ids    = implode( ',', array_map( 'absint', $related_ids ) );
 			$query['where'] .= " AND p.ID IN ( {$related_ids} )";
 		}
@@ -251,6 +254,10 @@ class WC_Related_Products {
 		return $query;
 	}
 
+	public function redisplay_related() {
+		woocommerce_output_related_products();
+
+	}
 
 	/**
 	 * @param $args
@@ -263,13 +270,13 @@ class WC_Related_Products {
 
 
 		$cols = ( $sets['columns'] > 0 ) ? (int) $sets['columns'] : 'fuck';
-		$max = ( $sets['limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
+		$max  = ( $sets['limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
 
 		$args['posts_per_page'] = $max;
 		$args['columns']        = $cols;
 
-		var_dump($args);
-		var_dump($sets);
+		var_dump( $args );
+		var_dump( $sets );
 
 		return $args;
 	}
