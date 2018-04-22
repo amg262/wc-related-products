@@ -35,6 +35,18 @@ class WC_Related_Products {
 	}
 
 	/**
+	 * @return null
+	 */
+	public static function getInstance() {
+
+		if ( static::$instance === null ) {
+			static::$instance = new static;
+		}
+
+		return static::$instance;
+	}
+
+	/**
 	 * WC_Related_Products constructor.
 	 */
 	public function init() {
@@ -72,18 +84,6 @@ class WC_Related_Products {
 		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 
 
-	}
-
-	/**
-	 * @return null
-	 */
-	public static function getInstance() {
-
-		if ( static::$instance === null ) {
-			static::$instance = new static;
-		}
-
-		return static::$instance;
 	}
 
 	/**
