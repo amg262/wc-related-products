@@ -11,10 +11,6 @@ if ( ! is_admin() ) {
 	wp_die( 'You must be an admin to view this.' );
 }
 
-use function add_submenu_page;
-use function esc_html_e;
-use function wp_enqueue_media;
-
 /**
  * Class WC_Bom_Settings
  *
@@ -93,7 +89,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 
 		register_setting(
 			'wc_bom_settings_group', // Option group
-			'WC_RP_Settings', // Option name
+			'wc_bom_settings', // Option name
 			[ $this->worker, 'sanitize' ] // Sanitize
 		);
 
@@ -280,7 +276,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		global $wc_bom_options, $wc_bom_settings;
 
 		$wc_bom_options  = get_option( 'wc_bom_options' );
-		$wc_bom_settings = get_option( 'WC_RP_Settings' );
+		$wc_bom_settings = get_option( 'wc_bom_settings' );
 		// Enqueue Media Library Use
 		wp_enqueue_media();
 		var_dump( $wc_bom_settings ); ?>
