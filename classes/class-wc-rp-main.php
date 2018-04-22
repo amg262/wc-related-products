@@ -1,21 +1,10 @@
 <?php
-/*
-Plugin Name: WooCommerce Related Products
-Description: Select your own related products instead of pulling them in by category.
-Version:     1.0
-Plugin URI:  http://andrewgunn.net
-Author:      amg26
-Author URI:  http://andrewgunn.net
-*/
 /**
- *
+ * Created by PhpStorm.
+ * User: andy
+ * Date: 4/22/18
+ * Time: 2:04 AM
  */
-const WC_BOM_SETTINGS = 'wc_bom_settings';
-/**
- *
- */
-const WC_BOM_OPTIONS  = 'wc_bom_options';
-
 
 /**
  * Class WC_Related_Products
@@ -39,7 +28,7 @@ class WC_Related_Products {
 	 */
 	public function init() {
 
-		include_once( __DIR__ . '/classes/class-wc-rp-settings.php' );
+		include_once( __DIR__ . '/class-wc-rp-settings.php' );
 		$set = WC_RP_Settings::getInstance();
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
@@ -362,5 +351,3 @@ class WC_Related_Products {
 		wp_enqueue_style( 'bom_css' );
 	}
 }
-
-$wcrp                 = WC_Related_Products::getInstance();
