@@ -7,12 +7,29 @@ Plugin URI:  http://andrewgunn.net
 Author:      amg26
 Author URI:  http://andrewgunn.net
 */
+/**
+ *
+ */
 const WC_BOM_SETTINGS = 'wc_bom_settings';
+/**
+ *
+ */
 const WC_BOM_OPTIONS  = 'wc_bom_options';
+
+
+/**
+ * Class WC_Related_Products
+ */
 class WC_Related_Products {
 
+	/**
+	 * @var null
+	 */
 	protected static $instance = null;
 
+	/**
+	 * WC_Related_Products constructor.
+	 */
 	protected function __construct() {
 		$this->init();
 	}
@@ -22,27 +39,25 @@ class WC_Related_Products {
 	 */
 	public function init() {
 
-		include_once( __DIR__ . '/class-wc-bom-settings.php' );
-		$set = \WooBom\WC_Bom_Settings::getInstance();
+		include_once( __DIR__ . '/class-wc-rp-settings.php' );
+		$set = WC_RP_Settings::getInstance();
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
-
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
 		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 15 );
-
 		add_action( 'woocommerce_process_product_meta', [ $this, 'wc_rp_save_related_products' ], 10, 2 );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
-
 		add_filter( 'woocommerce_product_related_posts_relate_by_category', [ $this, 'wc_rp_taxonomy_rel', ], 10, 2 );
 		add_filter( 'woocommerce_product_related_posts_relate_by_tag', [ $this, 'wc_rp_taxonomy_rel' ], 10, 2 );
 		add_filter( 'woocommerce_product_related_posts_force_display', [ $this, 'wc_rp_force_display' ], 10, 2 );
 		add_action( 'woocommerce_product_options_related', [ $this, 'wc_rp_select_related_products' ] );
-
-
 	}
 
+	/**
+	 * @return null
+	 */
 	public static function getInstance() {
 
 		if ( static::$instance === null ) {
@@ -97,9 +112,9 @@ class WC_Related_Products {
 		$related_ids = get_post_meta( $product_id, '_related_ids', true );
 		if ( ! empty( $related_ids ) ) {
 			return false;
-		} else {
-			return 'none' === get_option( 'wc_rp_empty_behavior' ) ? false : $result;
 		}
+
+		return 'none' === get_option( 'wc_rp_empty_behavior' ) ? false : $result;
 	}
 
 	/**
@@ -118,14 +133,12 @@ class WC_Related_Products {
                             data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'woocommerce' ); ?>"
                             data-action="woocommerce_json_search_products_and_variations"
                             data-exclude="<?php echo (int) $post->ID; ?>">
-						<?php
-						foreach ( $product_ids as $product_id ) {
+						<?php foreach ( $product_ids as $product_id ) {
 							$product = wc_get_product( $product_id );
 							if ( is_object( $product ) ) {
 								echo '<option value="' . esc_attr( $product_id ) . '"' . selected( true, true, false ) . '>' . wp_kses_post( $product->get_formatted_name() ) . '</option>';
 							}
-						}
-						?>
+						} ?>
                     </select> <?php echo wc_help_tip( __( 'Related products are displayed on the product detail page.', 'woocommerce' ) ); ?>
                 </p>
 			<?php elseif ( $woocommerce->version >= '2.3' ) : ?>
@@ -141,33 +154,29 @@ class WC_Related_Products {
 							$json_ids[ $product_id ] = wp_kses_post( $product->get_formatted_name() );
 						}
 					}
-
-					echo esc_attr( json_encode( $json_ids ) );
-					?>" value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>"/> <img class="help_tip"
-                                                                                              data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
-                                                                                              src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png"
-                                                                                              height="16" width="16"/>
+					echo esc_attr( json_encode( $json_ids ) ); ?>"
+                           value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>"/>
+                    <img class="help_tip"
+                         data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
+                         src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/>
                 </p>
 			<?php else: ?>
                 <p class="form-field"><label for="related_ids"><?php _e( 'Related Products', 'woocommerce' ); ?></label>
                     <select id="related_ids" name="related_ids[]" class="ajax_chosen_select_products"
                             multiple="multiple"
                             data-placeholder="<?php _e( 'Search for a product&hellip;', 'woocommerce' ); ?>">
-						<?php
-						foreach ( $product_ids as $product_id ) {
+						<?php foreach ( $product_ids as $product_id ) {
 
 							$product = new WC_Product( $product_id );
 
 							if ( $product ) {
 								echo '<option value="' . esc_attr( $product_id ) . '" selected="selected">' . esc_html( $product->get_formatted_name() ) . '</option>';
 							}
-						}
-						?>
-                    </select> <img class="help_tip"
-                                   data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
-                                   src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16"
-                                   width="16"/>
-                </p>
+						} ?>
+                    </select>
+                    <img class="help_tip"
+                         data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
+                         src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/></p>
 			<?php endif; ?>
         </div>
 		<?php
@@ -243,6 +252,11 @@ class WC_Related_Products {
 	}
 
 
+	/**
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
 	public function wc_change_number_related_products( $args ) {
 
 		$net  = ( get_field( 'related_total', 'option' ) ) ? (int) get_field( 'related_total', 'option' ) : 5;
@@ -272,24 +286,20 @@ class WC_Related_Products {
 	public function wc_rp_settings_page() {
 		if ( isset( $_POST['submit_custom_related_products'] ) && current_user_can( 'manage_options' ) ) {
 			check_admin_referer( 'wc_related_products', '_custom_related_products_nonce' );
-
 			// save settings
 			if ( isset( $_POST['wc_rp_empty_behavior'] ) && $_POST['wc_rp_empty_behavior'] != '' ) {
 				update_option( 'wc_rp_empty_behavior', $_POST['wc_rp_empty_behavior'] );
 			} else {
 				delete_option( 'wc_rp_empty_behavior' );
 			}
-
 			echo '<div id="message" class="updated"><p>Settings saved</p></div>';
-		}
+		} ?>
 
-		?>
         <div class="wrap" id="custom-related-products">
             <h2>Custom Related Products</h2>
-			<?php
-			$behavior_none_selected = ( get_option( 'wc_rp_empty_behavior' ) === 'none' ) ? 'selected="selected"' : '';
-
+			<?php $behavior_none_selected = ( get_option( 'wc_rp_empty_behavior' ) === 'none' ) ? 'selected="selected"' : '';
 			echo '
+		
 		<form method="post" action="admin.php?page=wc_related_products">
 			' . wp_nonce_field( 'wc_related_products', '_custom_related_products_nonce', true, false ) . '
 			<p>If I have not selected related products:
@@ -298,14 +308,10 @@ class WC_Related_Products {
 					<option value="none" ' . $behavior_none_selected . '>Don&rsquo;t show any related products</option>
 				</select>
 			</p>
-			<p>
-				<input type="submit" name="submit_custom_related_products" value="Save" class="button button-primary" />
-			</p>
+			<p><input type="submit" name="submit_custom_related_products" value="Save" class="button button-primary" /></p>
 		</form>
-	';
-			?>
+	'; ?>
         </div>
-
 		<?php
 	} // end settings page
 
@@ -338,10 +344,7 @@ class WC_Related_Products {
 	public function load_assets() {
 		$url  = 'assets/dist/scripts/';
 		$url2 = 'assets/dist/styles/';
-		wp_register_script( 'bom_js', plugins_url( $url . 'wc-bom.min.js', __FILE__ ) );
 		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.min.js', __FILE__ ) );
-		//wp_register_script( 'api_js', plugins_url( $url . 'wc-bom-api.min.js', __FILE__ ) );
-		wp_register_script( 'wp_js', plugins_url( $url . 'wc-bom-wp.min.js', __FILE__ ) );
 		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.min.css', __FILE__ ) );
 		wp_register_script( 'chosen_js',
 			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js' );
@@ -353,15 +356,10 @@ class WC_Related_Products {
 		wp_enqueue_script( 'sweetalertjs', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js' );
 		wp_enqueue_style( 'sweetalert_css', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css' );
 
-		wp_enqueue_script( 'bom_js' );
 		wp_enqueue_script( 'bom_adm_js' );
 		wp_enqueue_script( 'chosen_js' );
 		wp_enqueue_style( 'chosen_css' );
-		//wp_enqueue_script( 'ajax_js' );
-		//wp_enqueue_script( 'api_js' );
-		//wp_enqueue_script( 'wp_js' );
 		wp_enqueue_style( 'bom_css' );
-
 	}
 }
 
