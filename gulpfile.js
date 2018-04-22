@@ -11,6 +11,8 @@ const browserSync = require("browser-sync").create();
 const cssnano = require("gulp-cssnano");
 const zip = require('gulp-zip');
 const unzip = require('gulp-unzip');
+const minimatch = require('minimatch');
+const mkdirp = require('mkdirp');
 
 
 var paths = {

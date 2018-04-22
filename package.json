@@ -9,7 +9,7 @@
     "build": "gulp build",
     "clean": "gulp clean",
     "watch": "gulp serve",
-    "postinstall": ""
+    "postinstall": "gulp"
   },
   "repository": {
     "type": "git",
@@ -43,8 +43,8 @@
     "gulp-unzip": "^0.2.0",
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
-    "gulp-zip": "^4.0.0"
+    "gulp-zip": "^4.0.0",
+    "postcss": "^6.0.21"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
