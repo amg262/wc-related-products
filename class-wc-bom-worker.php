@@ -135,6 +135,8 @@ class WC_Bom_Worker {
 
 		$wc_bom_options  = get_option( 'wc_bom_options' );
 		$wc_bom_settings = get_option( 'wc_bom_settings' );
+
+
 		// Enqueue Media Library Use
 		wp_enqueue_media();
 		//include_once __DIR__ . '/class-wc-bom-logger.php';
@@ -211,7 +213,6 @@ class WC_Bom_Worker {
                         <table class="form-table">
                             <tbody>
 
-
                             <!----------- OPTION ----------->
                             <tr>
 								<?php $label = 'Enable Beta'; ?>
@@ -229,6 +230,25 @@ class WC_Bom_Worker {
                                            name="wc_bom_settings[<?php _e( $key ); ?>]"
                                            value="1"
 										<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> />
+                                </td>
+                            </tr>
+                            <tr>
+								<?php
+								$label = 'License Key';
+								$key   = $this->format_key( $label );
+								$obj   = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row">x
+
+                                    <label for="<?php _e( $id ); ?>">
+										<?php _e( $label ); ?>
+                                    </label>
+                                </th>
+                                <td>
+                                    <input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
                                 </td>
                             </tr>
                             <!----------- OPTION ----------->
@@ -303,18 +323,6 @@ class WC_Bom_Worker {
 
                                 </td>
                             </tr>
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-                            <!----------- OPTION ----------->
-
                             </tbody>
                         </table>
 
@@ -418,26 +426,7 @@ class WC_Bom_Worker {
                         <table class="form-table">
                             <tbody>
                             <!----------- OPTION ----------->
-                            <tr>
-								<?php
-								$label = 'License Key';
-								$key   = $this->format_key( $label );
-								$id    = 'wc_bom_options[' . $key . ']';
-								$obj   = $wc_bom_options[ $key ]; ?>
-                                <th scope="row">x
 
-                                    <label for="<?php _e( $id ); ?>">
-										<?php _e( $label ); ?>
-                                    </label>
-                                </th>
-                                <td>
-                                    <input type="text"
-                                           title="wc_bom_options[<?php _e( $key ); ?>]"
-                                           id="wc_bom_options[<?php _e( $key ); ?>]"
-                                           name="wc_bom_options[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_options[ $key ]; ?>"/>
-                                </td>
-                            </tr>
 
                             <!----------- OPTION ----------->
                             <!----------- AJAX ----------->

@@ -22,9 +22,10 @@ class WC_Related_Products {
 	 */
 	public function init() {
 
-		//include_once( __DIR__ . '/class-wc-bom-settings.php' );
-		//$set = \WooBom\WC_Bom_Settings::getInstance();
+		include_once( __DIR__ . '/class-wc-bom-settings.php' );
+		$set = \WooBom\WC_Bom_Settings::getInstance();
 		add_action( 'init', [ $this, 'load_assets' ] );
+		add_action( 'admin_init', [ $this, 'create_options' ] );
 
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
@@ -49,6 +50,21 @@ class WC_Related_Products {
 		}
 
 		return static::$instance;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function create_options() {
+
+		if ( ! get_option( WC_BOM_OPTIONS ) ) {
+			add_option( WC_BOM_OPTIONS, [ 'init' => 'true' ] );
+		}
+		if ( ! get_option( WC_BOM_SETTINGS ) ) {
+			add_option( WC_BOM_SETTINGS, [ 'init' => 'true' ] );
+		}
+		//delete_option( 'wc_bom_settings' );
+		//delete_option( 'wc_bom_options' );
 	}
 
 	/**
