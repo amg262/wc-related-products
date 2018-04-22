@@ -7,7 +7,8 @@ Plugin URI:  http://andrewgunn.net
 Author:      Scott Nelle
 Author URI:  http://andrewgunn.net
 */
-
+const WC_BOM_SETTINGS = 'wc_bom_settings';
+const WC_BOM_OPTIONS  = 'wc_bom_options';
 class WC_Related_Products {
 
 	protected static $instance = null;
@@ -20,6 +21,11 @@ class WC_Related_Products {
 	 * WC_Related_Products constructor.
 	 */
 	public function init() {
+
+		include_once( __DIR__ . '/class-wc-bom-settings.php' );
+		$set = \WooBom\WC_Bom_Settings::getInstance();
+		add_action( 'init', [ $this, 'load_assets' ] );
+
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
@@ -295,6 +301,39 @@ class WC_Related_Products {
 
 		return $actions;
 	}
+
+
+	/**
+	 *
+	 */
+	public function load_assets() {
+		$url  = 'assets/dist/scripts/';
+		$url2 = 'assets/dist/styles/';
+		wp_register_script( 'bom_js', plugins_url( $url . 'wc-bom.min.js', __FILE__ ) );
+		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.min.js', __FILE__ ) );
+		//wp_register_script( 'api_js', plugins_url( $url . 'wc-bom-api.min.js', __FILE__ ) );
+		wp_register_script( 'wp_js', plugins_url( $url . 'wc-bom-wp.min.js', __FILE__ ) );
+		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.min.css', __FILE__ ) );
+		wp_register_script( 'chosen_js',
+			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js' );
+		wp_register_style( 'chosen_css',
+			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css' );
+
+		wp_enqueue_script( 'postbox' );
+
+		wp_enqueue_script( 'sweetalertjs', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js' );
+		wp_enqueue_style( 'sweetalert_css', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css' );
+
+		wp_enqueue_script( 'bom_js' );
+		wp_enqueue_script( 'bom_adm_js' );
+		wp_enqueue_script( 'chosen_js' );
+		wp_enqueue_style( 'chosen_css' );
+		//wp_enqueue_script( 'ajax_js' );
+		//wp_enqueue_script( 'api_js' );
+		//wp_enqueue_script( 'wp_js' );
+		wp_enqueue_style( 'bom_css' );
+
+	}
 }
 
-$wcrp = WC_Related_Products::getInstance();
+$wcrp                 = WC_Related_Products::getInstance();
