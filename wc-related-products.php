@@ -43,22 +43,18 @@ class WC_Related_Products {
 		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
+
 		$rp_prioirty  = ( isset( $opts['related_priority'] ) ) ? (int) $opts['related_priority'] : 15;
 		$up_priority  = ( isset( $opts['upsell_priority'] ) ) ? (int) $opts['upsell_priority'] : 15;
 		$cs_prioirity = ( isset( $opts['crosssell_priority'] ) ) ? (int) $opts['crosssell_priority'] : 20;
 
-		//	$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
-//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 
-		//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_cross_sell_display', 20 );
-
-//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], $rp_prioirty );
 		//add_action( 'woocommerce_after_single_product_summary', 'replay_upsells', 15 );
-		//add_filter( 'woocommerce_upsell_display_args', [ $this, 'custom_woocommerce_upsell_display_args' ] );
+		add_filter( 'woocommerce_upsell_display_args', [ $this, 'custom_woocommerce_upsell_display_args' ] );
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_cross' ], $cs_prioirity );
 
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
@@ -312,11 +308,6 @@ class WC_Related_Products {
 
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = ( isset( $opts['show_upsells'] ) ) ? (bool) $opts['show_upsells'] : false;
-
-		if ( $is_active == true ) {
-			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
-
-		}
 
 		$limit = ( isset( $opts['upsell_columns'] ) ) ? (int) $opts['upsell_columns'] : 2;
 		$cols  = ( isset( $opts['upsell_limit'] ) ) ? (int) $opts['upsell_limit'] : 2;

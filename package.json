@@ -1,15 +1,15 @@
 {
-  "name": "woobom",
+  "name": "wc-related-products",
   "version": "1.0.0",
   "description": "=== WooCommerce Bill of Materials === Contributors: netraa414, amg26 Tags: woocommerce, woocommerce bill of materials, bill of materials, bom, woocommere bom, material tracking, woocommere material tracking, raw material tracking, woocommere raw material, woocommerce erp, erp, bom, woo bom, wc bom Donate link: http://andrewgunn.org/donate Requires at least: 3.0 Tested up to: 4.7.2 Stable tag: 1.0.0 License: GNU AGPLv3 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html",
   "main": "index.js",
   "scripts": {
     "refresh": "npm update && npm rebuild && npm start",
-    "start": "gulp clean",
+    "start": "gulp default",
     "build": "gulp build",
     "clean": "gulp clean",
     "watch": "gulp serve",
-    "postinstall": "gulp clean"
+    "postinstall": ""
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,7 @@
     "url": "https://bitbucket.org/amg262/wc-bom/wiki/"
   },
   "homepage": "https://amg262@bitbucket.org/amg262/wc-bom.git",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "browser-sync": "^2.18.8",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
@@ -45,5 +44,7 @@
     "gulp-util": "^3.0.8",
     "gulp-watch": "^4.3.11",
     "gulp-zip": "^4.0.0"
+  },
+  "devDependencies": {
   }
 }

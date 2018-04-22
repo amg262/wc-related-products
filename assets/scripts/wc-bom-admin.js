@@ -28,6 +28,17 @@ jQuery(document).ready(function ($) {
 // HTML
     //var bar = new ProgressBar.Line('#container', {easing: 'easeInOut'});
     //bar.animate(1);  // Value from 0.0 to 1.0
+
+    $("#wcrp-settings").click(function () {
+        $("#wcrp-settings").css('display', 'block');
+        $("#wcrp-options").css('display', 'none');
+
+    });
+    $("#wcrp-options").click(function () {
+        $("#wcrp-settings").css('display', 'none');
+        $("#wcrp-options").css('display', 'block');
+
+    });
     $(".chosen-select").chosen();
 
     $("#prod-select").change(function () {

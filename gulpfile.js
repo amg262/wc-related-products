@@ -41,8 +41,6 @@ gulp.task("purge", function () {
         .pipe(clean());
     gulp.src(paths.dist_img + "*")
         .pipe(clean());
-    gulp.src(paths.archive + "*")
-        .pipe(clean());
 });
 
 // Copy all static images
