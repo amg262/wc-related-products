@@ -41,10 +41,19 @@ class WC_Related_Products {
 
 		include_once( __DIR__ . '/classes/class-wc-rp-settings.php' );
 		$set = WC_RP_Settings::getInstance();
+		$opts = get_option( WC_BOM_SETTINGS );
+
+		$rp_prioirty = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
+		$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
+	//	$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
+
+		echo $num;
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
-		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], 15 );
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], $rp_prioirty );
+		add_filter( 'woocommerce_upsell_display_args', [$this,'custom_woocommerce_upsell_display_args'] );
+        add_action( 'woocommerce_after_single_product_summary', [$this,'redisplay_cross'], 20 );
 
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
@@ -272,23 +281,63 @@ class WC_Related_Products {
 		$sets = get_option( 'wc_bom_settings' );
 
 
-		$cols = ( $sets['columns'] > 0 ) ? (int) $sets['columns'] : 'fuck';
-		$max  = ( $sets['limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
+		$cols = ( $sets['related_columns'] > 0 ) ? (int) $sets['related_columns'] : 'fuck';
+		$limit  = ( $sets['related_limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
 
-		$args['posts_per_page'] = $max;
+		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols;
 
 		return $args;
 	}
 
 	/**
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	public function custom_woocommerce_upsell_display_args( $args ) {
+
+		$opts = get_option( WC_BOM_SETTINGS );
+		$limit = (isset($opts['upsell_columns'])) ? (int) $opts['upsell_columns'] : 2;
+		$cols = (isset($opts['upsell_limit'])) ? (int) $opts['upsell_limit'] : 2;
+
+		$args['posts_per_page'] = $limit;
+		$args['columns']        = $cols; //change number of upsells here
+
+		return $args;
+	}
+
+	/**
+	 *
+	 */
+	function redisplay_cross() {
+
+
+		$opts = get_option( WC_BOM_SETTINGS );
+		$is_active = (isset($opts['upsell_columns'])) ? (bool) $opts['upsell_columns'] : false;
+
+		if ($is_active === true) {
+			$limit = (isset($opts['crosssell_columns'])) ? (int) $opts['crosssell_columns'] : 2;
+			$cols = (isset($opts['crosssell_limit'])) ? (int) $opts['crosssell_limit'] : 2;
+
+			woocommerce_cross_sell_display( $limit, $cols );
+        }
+
+	}
+
+
+	/**
 	 * Create the menu item.
 	 */
 	public function wc_rp_create_menu() {
-		add_submenu_page( 'woocommerce', 'Related Products', 'Related Products', 'manage_options', 'wc_related_products', [
-			$this,
-			'wc_rp_settings_page',
-		] );
+		add_submenu_page(
+			'woocommerce',
+			'Related Products',
+			'Related Products',
+			'manage_options',
+			'wc_related_products',
+			[ $this, 'wc_rp_settings_page', ]
+        );
 	}
 
 
