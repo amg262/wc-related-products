@@ -46,7 +46,7 @@ class WC_Related_Products {
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
-		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 15 );
+		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 10, 1 );
 		add_action( 'woocommerce_process_product_meta', [ $this, 'wc_rp_save_related_products' ], 10, 2 );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
 		add_filter( 'woocommerce_product_related_posts_relate_by_category', [ $this, 'wc_rp_taxonomy_rel', ], 10, 2 );
@@ -259,12 +259,17 @@ class WC_Related_Products {
 	 */
 	public function wc_change_number_related_products( $args ) {
 
-		$net  = ( get_field( 'related_total', 'option' ) ) ? (int) get_field( 'related_total', 'option' ) : 5;
-		$cols = ( get_field( 'related_columns', 'option' ) ) ? (int) get_field( 'related_columns', 'option' ) : 5;
-		echo 'net-' . $net;
+		$sets = get_option( 'wc_bom_settings' );
 
-		$args['posts_per_page'] = $net;
+
+		$cols = ( $sets['columns'] > 0 ) ? (int) $sets['columns'] : 'fuck';
+		$max = ( $sets['limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
+
+		$args['posts_per_page'] = $max;
 		$args['columns']        = $cols;
+
+		var_dump($args);
+		var_dump($sets);
 
 		return $args;
 	}

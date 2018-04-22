@@ -8,7 +8,7 @@
 
 
 if ( ! is_admin() ) {
-	wp_die( 'You must be an admin to view this.' );
+	//wp_die( 'You must be an admin to view this.' );
 }
 
 /**
@@ -338,6 +338,28 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                             <tr><?php $label = 'License Key';
 								$key         = $this->format_key( $label );
 								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'Columns';
+	                            $key         = $this->format_key( $label );
+	                            $obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'Limit';
+	                            $key         = $this->format_key( $label );
+	                            $obj         = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
                                 <td><input type="text"
                                            title="wc_bom_settings[<?php _e( $key ); ?>]"
