@@ -40,30 +40,42 @@ class WC_Related_Products {
 	public function init() {
 
 		include_once( __DIR__ . '/classes/class-wc-rp-settings.php' );
-		$set = WC_RP_Settings::getInstance();
+		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
-		$rp_prioirty = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
-		$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
-	//	$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
+		$rp_prioirty  = ( isset( $opts['related_priority'] ) ) ? (int) $opts['related_priority'] : 15;
+		$up_priority  = ( isset( $opts['upsell_priority'] ) ) ? (int) $opts['upsell_priority'] : 15;
+		$cs_prioirity = ( isset( $opts['crosssell_priority'] ) ) ? (int) $opts['crosssell_priority'] : 20;
 
-		echo $num;
+		//	$num = (isset($opts['priority'])) ? (int) $opts['priority'] : 15;
+//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+
+		//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_cross_sell_display', 20 );
+
+//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], $rp_prioirty );
-		add_filter( 'woocommerce_upsell_display_args', [$this,'custom_woocommerce_upsell_display_args'] );
-        add_action( 'woocommerce_after_single_product_summary', [$this,'redisplay_cross'], 20 );
+		//add_action( 'woocommerce_after_single_product_summary', 'replay_upsells', 15 );
+		//add_filter( 'woocommerce_upsell_display_args', [ $this, 'custom_woocommerce_upsell_display_args' ] );
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_cross' ], $cs_prioirity );
 
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
 		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 15 );
+		add_filter( 'woocommerce_cross_sells_columns', [ $this, 'change_cross_sells_columns' ], 20 );
+
+
 		add_action( 'woocommerce_process_product_meta', [ $this, 'wc_rp_save_related_products' ], 10, 2 );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
 		add_filter( 'woocommerce_product_related_posts_relate_by_category', [ $this, 'wc_rp_taxonomy_rel', ], 10, 2 );
 		add_filter( 'woocommerce_product_related_posts_relate_by_tag', [ $this, 'wc_rp_taxonomy_rel' ], 10, 2 );
 		add_filter( 'woocommerce_product_related_posts_force_display', [ $this, 'wc_rp_force_display' ], 10, 2 );
 		add_action( 'woocommerce_product_options_related', [ $this, 'wc_rp_select_related_products' ] );
+		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+
+
 	}
 
 	/**
@@ -267,6 +279,7 @@ class WC_Related_Products {
 	 *
 	 */
 	public function redisplay_related() {
+
 		woocommerce_output_related_products();
 
 	}
@@ -281,8 +294,8 @@ class WC_Related_Products {
 		$sets = get_option( 'wc_bom_settings' );
 
 
-		$cols = ( $sets['related_columns'] > 0 ) ? (int) $sets['related_columns'] : 'fuck';
-		$limit  = ( $sets['related_limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
+		$cols  = ( $sets['related_columns'] > 0 ) ? (int) $sets['related_columns'] : 'fuck';
+		$limit = ( $sets['related_limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
 
 		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols;
@@ -297,9 +310,16 @@ class WC_Related_Products {
 	 */
 	public function custom_woocommerce_upsell_display_args( $args ) {
 
-		$opts = get_option( WC_BOM_SETTINGS );
-		$limit = (isset($opts['upsell_columns'])) ? (int) $opts['upsell_columns'] : 2;
-		$cols = (isset($opts['upsell_limit'])) ? (int) $opts['upsell_limit'] : 2;
+		$opts      = get_option( WC_BOM_SETTINGS );
+		$is_active = ( isset( $opts['show_upsells'] ) ) ? (bool) $opts['show_upsells'] : false;
+
+		if ( $is_active == true ) {
+			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+
+		}
+
+		$limit = ( isset( $opts['upsell_columns'] ) ) ? (int) $opts['upsell_columns'] : 2;
+		$cols  = ( isset( $opts['upsell_limit'] ) ) ? (int) $opts['upsell_limit'] : 2;
 
 		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols; //change number of upsells here
@@ -313,18 +333,27 @@ class WC_Related_Products {
 	function redisplay_cross() {
 
 
-		$opts = get_option( WC_BOM_SETTINGS );
-		$is_active = (isset($opts['upsell_columns'])) ? (bool) $opts['upsell_columns'] : false;
+		$opts      = get_option( WC_BOM_SETTINGS );
+		$is_active = ( isset( $opts['show_crosssells'] ) ) ? (bool) $opts['show_crosssells'] : false;
 
-		if ($is_active === true) {
-			$limit = (isset($opts['crosssell_columns'])) ? (int) $opts['crosssell_columns'] : 2;
-			$cols = (isset($opts['crosssell_limit'])) ? (int) $opts['crosssell_limit'] : 2;
+		if ( $is_active === true ) {
+			$cols  = ( isset( $opts['crosssell_columns'] ) ) ? (int) $opts['crosssell_columns'] : 2;
+			$limit = ( isset( $opts['crosssell_limit'] ) ) ? (int) $opts['crosssell_limit'] : 2;
 
 			woocommerce_cross_sell_display( $limit, $cols );
-        }
+		}
 
 	}
 
+	public function change_cross_sells_columns( $columns ) {
+		$opts = get_option( WC_BOM_SETTINGS );
+
+		$cols  = ( isset( $opts['crosssell_columns'] ) ) ? (int) $opts['crosssell_columns'] : 2;
+		$limit = ( isset( $opts['crosssell_limit'] ) ) ? (int) $opts['crosssell_limit'] : 2;
+
+
+		return $cols;
+	}
 
 	/**
 	 * Create the menu item.
@@ -337,7 +366,7 @@ class WC_Related_Products {
 			'manage_options',
 			'wc_related_products',
 			[ $this, 'wc_rp_settings_page', ]
-        );
+		);
 	}
 
 

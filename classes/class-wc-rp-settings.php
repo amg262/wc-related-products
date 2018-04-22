@@ -157,7 +157,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 								//do_settings_sections( 'wc-bom-options-admin' );
 								//submit_button( 'Save Options' );
 							} // end if/else//wc_bom_options_group2
-                        		//submit_button( 'Save Options' );
+							//submit_button( 'Save Options' );
 							?>
                         </div>
                     </div>
@@ -329,63 +329,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                 </td>
                             </tr>
                             <tr><?php $label = 'Header Text';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
-                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
-                                <td><input type="text"
-                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                                </td>
-                            </tr>
-                            <tr><?php $label = 'Priority';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
-                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
-                                <td><input type="text"
-                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                                </td>
-                            </tr>
-                            <tr><?php $label = 'Related Columns';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
-                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
-                                <td><input type="text"
-                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                                </td>
-                            </tr>
-                            <tr><?php $label = 'Related Limit';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
-                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
-                                <td><input type="text"
-                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                                </td>
-                            </tr>
-                            <tr><?php $label = 'UpSell Columns';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
-                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
-                                <td><input type="text"
-                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
-                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                                </td>
-                            </tr>
-                            <tr><?php $label = 'UpSell Limit';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
                                 <td><input type="text"
                                            title="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -395,7 +340,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                 </td>
                             </tr>
                             <tr>
-	                            <?php $label = 'Show Product CrossSells'; ?>
+	                            <?php $label = 'Show Related'; ?>
 	                            <?php $key = $this->format_key( $label ); ?>
 	                            <?php $opt = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
@@ -403,9 +348,99 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                            name="wc_bom_settings[<?php _e( $key ); ?>]"
                                            value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
                             </tr>
+                            <tr><?php $label = 'Related Columns';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'Related Limit';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'Related Priority';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <br>
+                            <hr>
+                            <br>
+                            <tr>
+	                            <?php $label = 'Show UpSells'; ?>
+	                            <?php $key = $this->format_key( $label ); ?>
+	                            <?php $opt = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="checkbox" id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
+                            </tr>
+                            <tr><?php $label = 'UpSell Columns';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'UpSell Limit';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <tr><?php $label = 'UpSell Priority';
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="text"
+                                           title="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                                </td>
+                            </tr>
+                            <br>
+                            <hr>
+                            <br>
+                            <tr>
+								<?php $label = 'Show CrossSells'; ?>
+								<?php $key = $this->format_key( $label ); ?>
+								<?php $opt = $wc_bom_settings[ $key ]; ?>
+                                <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
+                                <td><input type="checkbox" id="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                           value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
+                            </tr>
                             <tr><?php $label = 'CrossSell Columns';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
                                 <td><input type="text"
                                            title="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -415,8 +450,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                 </td>
                             </tr>
                             <tr><?php $label = 'CrossSell Limit';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
                                 <td><input type="text"
                                            title="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -426,8 +461,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                 </td>
                             </tr>
                             <tr><?php $label = 'CrossSell Priority';
-	                            $key         = $this->format_key( $label );
-	                            $obj         = $wc_bom_settings[ $key ]; ?>
+								$key         = $this->format_key( $label );
+								$obj         = $wc_bom_settings[ $key ]; ?>
                                 <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
                                 <td><input type="text"
                                            title="wc_bom_settings[<?php _e( $key ); ?>]"
