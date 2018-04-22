@@ -28,8 +28,7 @@
     "url": "https://bitbucket.org/amg262/wc-bom/wiki/"
   },
   "homepage": "https://amg262@bitbucket.org/amg262/wc-bom.git",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "browser-sync": "^2.18.8",
     "del": "^2.2.2",

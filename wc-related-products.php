@@ -4,7 +4,7 @@ Plugin Name: WooCommerce Related Products
 Description: Select your own related products instead of pulling them in by category.
 Version:     1.0
 Plugin URI:  http://andrewgunn.net
-Author:      Scott Nelle
+Author:      amg26
 Author URI:  http://andrewgunn.net
 */
 const WC_BOM_SETTINGS = 'wc_bom_settings';
@@ -22,13 +22,14 @@ class WC_Related_Products {
 	 */
 	public function init() {
 
-		include_once( __DIR__ . '/class-wc-bom-settings.php' );
-		$set = \WooBom\WC_Bom_Settings::getInstance();
+		//include_once( __DIR__ . '/class-wc-bom-settings.php' );
+		//$set = \WooBom\WC_Bom_Settings::getInstance();
 		add_action( 'init', [ $this, 'load_assets' ] );
 
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
+		add_filter( 'woocommerce_output_related_products_args', [ $this, 'wc_change_number_related_products' ], 15 );
 
 		add_action( 'woocommerce_process_product_meta', [ $this, 'wc_rp_save_related_products' ], 10, 2 );
 		add_filter( 'plugin_action_links', [ $this, 'plugin_links' ], 10, 5 );
@@ -225,6 +226,18 @@ class WC_Related_Products {
 		return $query;
 	}
 
+
+	public function wc_change_number_related_products( $args ) {
+
+		$net  = ( get_field( 'related_total', 'option' ) ) ? (int) get_field( 'related_total', 'option' ) : 5;
+		$cols = ( get_field( 'related_columns', 'option' ) ) ? (int) get_field( 'related_columns', 'option' ) : 5;
+		echo 'net-' . $net;
+
+		$args['posts_per_page'] = $net;
+		$args['columns']        = $cols;
+
+		return $args;
+	}
 
 	/**
 	 * Create the menu item.
