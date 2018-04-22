@@ -109,7 +109,7 @@ class WC_Bom_Settings {//implements WC_Abstract_Settings {
 			'wc-bom-settings-admin' // Page
 		);
 
-		register_setting(
+		/*register_setting(
 			'wc_bom_options_group', // Option group
 			'wc_bom_options', // Option name
 			[ $this->worker, 'sanitize' ] // Sanitize
@@ -127,7 +127,7 @@ class WC_Bom_Settings {//implements WC_Abstract_Settings {
 			'', // Title
 			[ $this->worker, 'options_callback' ], // Callback
 			'wc-bom-options-admin' // Page
-		);
+		);*/
 
 	}
 
@@ -141,24 +141,10 @@ class WC_Bom_Settings {//implements WC_Abstract_Settings {
 	public function settings_info() { ?>
         <div id="plugin-info-header" class="plugin-info header">
             <div class="plugin-info content">
-
             </div>
-
         </div>
 	<?php }
 
-
-	/**
-	 * Print the Section text
-	 */
-	public function options_info() { ?>
-        <div id="plugin-info-header" class="plugin-info header">
-            <div class="plugin-info content">
-                <b>sPitons</b>
-            </div>
-
-        </div>
-	<?php }
 
 	/**
 	 * Options page callback
@@ -169,9 +155,6 @@ class WC_Bom_Settings {//implements WC_Abstract_Settings {
 		$wc_bom_settings = get_option( WC_BOM_SETTINGS );
 		$wc_bom_options  = get_option( WC_BOM_OPTIONS );
 
-		//include_once __DIR__ . '/class-wc-bom-calculate.php';
-		//$calc = new WC_Bom_Calculate();
-
 		if ( isset( $_GET['tab'] ) ) {
 			$active_tab = $_GET['tab'];
 		} else {
@@ -181,65 +164,44 @@ class WC_Bom_Settings {//implements WC_Abstract_Settings {
 		wp_enqueue_media(); ?>
 
         <div class="wrap">
-
             <div class="wc-bom settings-page">
-
                 <h2><?php esc_html_e( the_title(), 'wc-bom' ); ?></h2>
-
                 <div id="icon-themes" class="icon32">&nbps;</div>
-
 				<?php ?>
-
                 <h2 class="nav-tab-wrapper">
                     <a href="?page=wc-rp&tab=settings" class="nav-tab
-                    <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">
-                        Settings
-                    </a>
+                    <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
 
                     <a href="?page=wc-rp&tab=options" class="nav-tab
-                    <?php echo $active_tab === 'options' ? 'nav-tab-active' : ''; ?>">
-                        Options
-                    </a>
+                    <?php echo $active_tab === 'options' ? 'nav-tab-active' : ''; ?>">Options</a>
 
                     <a href="?page=wc-rps&tab=support" class="nav-tab
-                    <?php echo $active_tab === 'support' ? 'nav-tab-active' : ''; ?>">
-                        Support
-                    </a>
-
+                    <?php echo $active_tab === 'support' ? 'nav-tab-active' : ''; ?>">Support</a>
                 </h2>
-
-				<?php  ?>
-
-
+				<?php ?>
                 <form method="post" action="options.php">
                     <div id="poststuff">
 
                         <div id="post-body" class="metabox-holder columns-2">
-
 							<?php if ( $active_tab === 'settings' || $active_tab === null ) {
-
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
-
-							} else if ( $active_tab === 'options' ) {
+							} elseif ( $active_tab === 'options' ) {
 								//echo 'hi';
-								settings_fields( 'wc_bom_options_group' );
-								do_settings_sections( 'wc-bom-options-admin' );
-								submit_button( 'Save Options' );
+								//settings_fields( 'wc_bom_options_group' );
+								//do_settings_sections( 'wc-bom-options-admin' );
+								//submit_button( 'Save Options' );
 
-							} else if ( $active_tab === 'support' ) {
+							} elseif ( $active_tab === 'support' ) {
 							} // end if/else//wc_bom_options_group2
 
 							//				submit_button( 'Save Options' );
 							?>
                         </div>
                     </div>
-
                 </form>
-
             </div>
-
         </div>
 		<?php
 	}
