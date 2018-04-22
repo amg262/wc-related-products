@@ -254,6 +254,9 @@ class WC_Related_Products {
 		return $query;
 	}
 
+	/**
+	 *
+	 */
 	public function redisplay_related() {
 		woocommerce_output_related_products();
 
@@ -274,9 +277,6 @@ class WC_Related_Products {
 
 		$args['posts_per_page'] = $max;
 		$args['columns']        = $cols;
-
-		var_dump( $args );
-		var_dump( $sets );
 
 		return $args;
 	}
@@ -354,20 +354,15 @@ class WC_Related_Products {
 	 *
 	 */
 	public function load_assets() {
-		$url  = 'assets/dist/scripts/';
-		$url2 = 'assets/dist/styles/';
-		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.min.js', __FILE__ ) );
+		$url  = 'dist/scripts/';
+		$url2 = 'dist/styles/';
+		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.min.js', __FILE__ ), [ 'jquery' ] );
 		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.min.css', __FILE__ ) );
 		wp_register_script( 'chosen_js',
-			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js' );
+			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js', [ 'jquery' ] );
 		wp_register_style( 'chosen_css',
 			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css' );
-
 		wp_enqueue_script( 'postbox' );
-
-		wp_enqueue_script( 'sweetalertjs', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js' );
-		wp_enqueue_style( 'sweetalert_css', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css' );
-
 		wp_enqueue_script( 'bom_adm_js' );
 		wp_enqueue_script( 'chosen_js' );
 		wp_enqueue_style( 'chosen_css' );
