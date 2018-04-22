@@ -423,10 +423,10 @@ class WC_Related_Products {
 	 *
 	 */
 	public function load_assets() {
-		$url  = 'dist/scripts/';
-		$url2 = 'dist/styles/';
-		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.min.js', __FILE__ ), [ 'jquery' ] );
-		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.min.css', __FILE__ ) );
+		$url  = 'assets/scripts/';
+		$url2 = 'assets/styles/';
+		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.js', __FILE__ ), [ 'jquery' ] );
+		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.css', __FILE__ ) );
 		wp_register_script( 'chosen_js',
 			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js', [ 'jquery' ] );
 		wp_register_style( 'chosen_css',

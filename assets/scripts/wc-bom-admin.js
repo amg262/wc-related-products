@@ -29,12 +29,13 @@ jQuery(document).ready(function ($) {
     //var bar = new ProgressBar.Line('#container', {easing: 'easeInOut'});
     //bar.animate(1);  // Value from 0.0 to 1.0
 
-    $("#wcrp-settings").click(function () {
+    $("#wcrp-nav-settings").click(function () {
+        alert('hi');
         $("#wcrp-settings").css('display', 'block');
         $("#wcrp-options").css('display', 'none');
 
     });
-    $("#wcrp-options").click(function () {
+    $("#wcrp-nav-options").click(function () {
         $("#wcrp-settings").css('display', 'none');
         $("#wcrp-options").css('display', 'block');
 
