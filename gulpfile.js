@@ -93,6 +93,7 @@ gulp.task('watch', function() {
   //gulp.watch(paths.scripts, ["scripts"]);
   gulp.watch(paths.home).on('change', browserSync.reload);
   gulp.watch('gulpfile.js').on('change', browserSync.reload);
+  gulp.watch(paths.assets+'*').on('change', browserSync.reload);
   //gulp.watch(paths.assets).on("", browserSync.reload);
   gulp.watch(paths.classes).on('change', browserSync.reload);
   gulp.watch(paths.includes).on('add', browserSync.reload);
