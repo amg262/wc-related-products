@@ -14,7 +14,7 @@ const unzip = require('gulp-unzip');
 const minimatch = require('minimatch');
 const mkdirp = require('mkdirp');
 
-const paths = {
+var paths = {
   assets: 'assets/',
   home: 'wc-related-products.php',
   lib_js: 'assets/scripts/',

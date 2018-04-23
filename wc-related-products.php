@@ -43,11 +43,9 @@ class WC_Related_Products {
 		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
-
 		$rp_prioirty  = isset( $opts['related_priority'] ) ? (int) $opts['related_priority'] : 15;
 		$up_priority  = isset( $opts['upsell_priority'] ) ? (int) $opts['upsell_priority'] : 15;
 		$cs_prioirity = isset( $opts['crosssell_priority'] ) ? (int) $opts['crosssell_priority'] : 20;
-
 
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
@@ -70,8 +68,6 @@ class WC_Related_Products {
 		add_filter( 'woocommerce_product_related_posts_force_display', [ $this, 'wc_rp_force_display' ], 10, 2 );
 		add_action( 'woocommerce_product_options_related', [ $this, 'wc_rp_select_related_products' ] );
 		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
-
-
 	}
 
 	/**
@@ -428,8 +424,8 @@ class WC_Related_Products {
 	 *
 	 */
 	public function load_assets() {
-		$url  = 'assets/scripts/';
-		$url2 = 'assets/styles/';
+		$url  = 'assets/';
+		$url2 = 'assets/';
 		wp_register_script( 'bom_adm_js', plugins_url( $url . 'wc-bom-admin.js', __FILE__ ), [ 'jquery' ] );
 		wp_register_style( 'bom_css', plugins_url( $url2 . 'wc-bom.css', __FILE__ ) );
 		wp_register_script( 'chosen_js',
