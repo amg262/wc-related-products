@@ -38,7 +38,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function init() {
+	public function init(): void {
 
 		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ] );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
@@ -52,7 +52,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 */
 	public static function getInstance() {
 
-		if ( ! isset( static::$instance ) ) {
+		if ( static::$instance === null ) {
 			static::$instance = new static;
 		}
 
@@ -63,7 +63,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 * /**
 	 * Add options page
 	 */
-	public function wc_bom_menu() {
+	public function wc_bom_menu(): void {
 
 		add_submenu_page(
 			'tools.php',
@@ -79,7 +79,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Register and add settings
 	 */
-	public function page_init() {
+	public function page_init(): void {
 
 		register_setting(
 			'wc_bom_settings_group', // Option group
@@ -106,7 +106,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Print the Section text
 	 */
-	public function settings_info() { ?>
+	public function settings_info(): void { ?>
         <div id="plugin-info-header" class="plugin-info header">
             <div class="plugin-info content">
             </div>
@@ -117,7 +117,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Options page callback
 	 */
-	public function settings_page() {
+	public function settings_page(): void {
 
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( WC_BOM_SETTINGS );
@@ -183,7 +183,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_admin() {
+	public function wco_admin(): void {
 
 
 		$ajax_data = $this->get_data();
@@ -199,7 +199,10 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		/* Output empty div. */
 	}
 
-	public function get_data() {
+	/**
+	 * @return array
+	 */
+	public function get_data(): array {
 
 		$args = [
 			'post_type'   => 'product',
@@ -219,7 +222,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_ajax() {
+	public function wco_ajax(): void {
 
 		//global $wpdb;
 		check_ajax_referer( 'ajax_nonce', 'security' );
@@ -251,7 +254,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return array
 	 */
-	public function sanitize( $input ) {
+	public function sanitize( $input ): array {
 
 		//$new_input = [];
 		//if ( isset( $input['license_key'] ) ) {
@@ -264,13 +267,19 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		return $input;
 	}
 
-	public function build_settings() {
+	/**
+	 *
+	 */
+	public function build_settings(): void {
 		$this->settings_sidebar();
 		$this->settings_callback();
 		//$this->settings_save();
 	}
 
-	public function settings_sidebar() { ?>
+	/**
+	 *
+	 */
+	public function settings_sidebar(): void { ?>
         <div id="postbox-container-1" class="postbox-container">
 
             <div id="normal-sortables" class="meta-box-sortables">
@@ -307,7 +316,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Get the settings option array and print one of its values
 	 */
-	public function settings_callback() {
+	public function settings_callback(): void {
 
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( 'wc_bom_settings' );
@@ -340,7 +349,10 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         </div>
 	<?php }
 
-	public function settings_fields() {
+	/**
+	 * @return string
+	 */
+	public function settings_fields(): string {
 		global $wc_bom_settings;
 
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
@@ -510,14 +522,22 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		<?php return 'hi';
 	}
 
-	public function format_key( $text ) {
+	/**
+	 * @param $text
+	 *
+	 * @return string
+	 */
+	public function format_key( $text ): string {
 		$str = str_replace( [ '-', ' ' ], '_', $text );
 
 		return strtolower( $str );
 	}
 
 
-	public function settings_save() {
+	/**
+	 *
+	 */
+	public function settings_save(): void {
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
         <tr>
