@@ -32,16 +32,16 @@ jQuery(document).ready(function($) {
   $('#wcrp-nav-settings').click(function() {
     $('#wcrp-settings').css('display', 'block');
     $('#wcrp-options').css('display', 'none');
-    $(this).attr('class','nav-tab nav-tab-active','nav-tab nav-tab-active');
-    $("#wcrp-nav-options").attr('class','nav-tab','nav-tab');
-    $("#wcrp-nav-support").attr('class','nav-tab','nav-tab');
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-options').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-support').attr('class', 'nav-tab', 'nav-tab');
   });
   $('#wcrp-nav-options').click(function() {
     $('#wcrp-settings').css('display', 'none');
     $('#wcrp-options').css('display', 'block');
-    $(this).attr('class','nav-tab nav-tab-active','nav-tab nav-tab-active');
-    $("#wcrp-nav-settings").attr('class','nav-tab','nav-tab');
-    $("#wcrp-nav-support").attr('class','nav-tab','nav-tab');
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-support').attr('class', 'nav-tab', 'nav-tab');
   });
   $('.chosen-select').chosen();
 
