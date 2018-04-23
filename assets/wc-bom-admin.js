@@ -18,183 +18,184 @@ var data = null;
 var val = null;
 var id = null;
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function($) {
 
 
-    //$("#commentForm").validate();
-    //var ProgressBar = require('progressbar.js');
+  //$("#commentForm").validate();
+  //var ProgressBar = require('progressbar.js');
 //yesdsfs
 // Assuming we have an empty <div id="container"></div> in
 // HTML
-    //var bar = new ProgressBar.Line('#container', {easing: 'easeInOut'});
-    //bar.animate(1);  // Value from 0.0 to 1.0
+  //var bar = new ProgressBar.Line('#container', {easing: 'easeInOut'});
+  //bar.animate(1);  // Value from 0.0 to 1.0
 
-    $("#wcrp-nav-settings").click(function () {
-        alert('hi');
-        $("#wcrp-settings").css('display', 'block');
-        $("#wcrp-options").css('display', 'none');
+  $('#wcrp-nav-settings').click(function() {
+    $('#wcrp-settings').css('display', 'block');
+    $('#wcrp-options').css('display', 'none');
+    $(this).attr('class','nav-tab nav-tab-active','nav-tab nav-tab-active');
+    $("#wcrp-nav-options").attr('class','nav-tab','nav-tab');
+    $("#wcrp-nav-support").attr('class','nav-tab','nav-tab');
+  });
+  $('#wcrp-nav-options').click(function() {
+    $('#wcrp-settings').css('display', 'none');
+    $('#wcrp-options').css('display', 'block');
+    $(this).attr('class','nav-tab nav-tab-active','nav-tab nav-tab-active');
+    $("#wcrp-nav-settings").attr('class','nav-tab','nav-tab');
+    $("#wcrp-nav-support").attr('class','nav-tab','nav-tab');
+  });
+  $('.chosen-select').chosen();
 
-    });
-    $("#wcrp-nav-options").click(function () {
-        $("#wcrp-settings").css('display', 'none');
-        $("#wcrp-options").css('display', 'block');
+  $('#prod-select').change(function() {
+    val = $('#prod-select').val();
+    $('#prod_select_chosen').attr('value', val);
+    console.log($('#prod_select_chosen').val());
+    console.log(val);
+  });
 
-    });
-    $(".chosen-select").chosen();
+  //$("#form_field").chosen().change( … );
+  //$("#form_field").trigger("chosen:updated");
 
-    $("#prod-select").change(function () {
-        val = $("#prod-select").val();
-        $('#prod_select_chosen').attr('value', val);
-        console.log($('#prod_select_chosen').val());
-        console.log(val);
-    });
+  $('#button_hit').click(function() {
+    var data = {
+      'url': ajax_object.ajax_url,
+      'action': 'wco_ajax',
+      'security': ajax_object.nonce,
+      'product': val,
+    };
 
-    //$("#form_field").chosen().change( … );
-    //$("#form_field").trigger("chosen:updated");
+    console.log(data);
 
-    $('#button_hit').click(function () {
-        var data = {
-            'url': ajax_object.ajax_url,
-            'action': 'wco_ajax',
-            'security': ajax_object.nonce,
-            'product': val
-        };
+    sweetAlert({
+          title: 'Export Product\'s BOM?',
+          text: 'Submit to run ajax request',
+          type: 'info',
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true,
+        },
+        function() {
 
-        console.log(data);
+          // We can also pass the url value separately from ajaxurl for front end AJAX implementations
+          jQuery.post(ajax_object.ajax_url, data, function(response) {
 
-        sweetAlert({
-                title: "Export Product's BOM?",
-                text: "Submit to run ajax request",
-                type: "info",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true,
-            },
-            function () {
-
-                // We can also pass the url value separately from ajaxurl for front end AJAX implementations
-                jQuery.post(ajax_object.ajax_url, data, function (response) {
-
-                    $('#prod_output').html(response)
-                    setTimeout(function () {
-                        swal("Finished");
-                    });
-                    //alert('seRespon ' + response);
-                });
+            $('#prod_output').html(response);
+            setTimeout(function() {
+              swal('Finished');
             });
+            //alert('seRespon ' + response);
+          });
+        });
 
-    });
+  });
 
-    $('#form_ajax_update').click(function (e) {
-        var data = {
-            'url': ajax_object.ajax_url,
-            'action': 'wco_ajax',
-            'security': ajax_object.nonce,
-            'ajax_data': ajax_object.ajax_data,
+  $('#form_ajax_update').click(function(e) {
+    var data = {
+      'url': ajax_object.ajax_url,
+      'action': 'wco_ajax',
+      'security': ajax_object.nonce,
+      'ajax_data': ajax_object.ajax_data,
 
-        };
+    };
 
-        console.log(data);
+    console.log(data);
 
-        sweetAlert({
-                title: "Ajax request example",
-                text: "Submit to run ajax request",
-                type: "info",
-                showCancelButton: true,
-                closeOnConfirm: false,
-                showLoaderOnConfirm: true,
-            },
-            function () {
+    sweetAlert({
+          title: 'Ajax request example',
+          text: 'Submit to run ajax request',
+          type: 'info',
+          showCancelButton: true,
+          closeOnConfirm: false,
+          showLoaderOnConfirm: true,
+        },
+        function() {
 
-                // We can also pass the url value separately from ajaxurl for front end AJAX implementations
-                jQuery.post(ajax_object.ajax_url, data, function (response) {
+          // We can also pass the url value separately from ajaxurl for front end AJAX implementations
+          jQuery.post(ajax_object.ajax_url, data, function(response) {
 
-                    $('#form_update_ouput').html(response);
+            $('#form_update_ouput').html(response);
 
-                    setTimeout(function () {
-                        swal("Ajax request: " + response);
-                    });
-                    //alert('seRespon ' + response);
-                });
+            setTimeout(function() {
+              swal('Ajax request: ' + response);
             });
-    });
-    /*$('#form_ajax_update').click(function (e) {
-     var data = {
-     'url': ajax_object.ajax_url,
-     'action': 'wco_ajax',
-     'security': ajax_object.nonce,
-     'ajax_data': ajax_object.ajax_data,
-     'data': [],
-     'postdata': ['posts']
-     //'data':ajax_object     // We pass php values differently!
-     //'security':ajax_object.nonce
-     };
+            //alert('seRespon ' + response);
+          });
+        });
+  });
+  /*$('#form_ajax_update').click(function (e) {
+   var data = {
+   'url': ajax_object.ajax_url,
+   'action': 'wco_ajax',
+   'security': ajax_object.nonce,
+   'ajax_data': ajax_object.ajax_data,
+   'data': [],
+   'postdata': ['posts']
+   //'data':ajax_object     // We pass php values differently!
+   //'security':ajax_object.nonce
+   };
 
-     console.log(data);
+   console.log(data);
 
-     sweetAlert({
-     title: "Ajax request example",
-     text: "Submit to run ajax request",
-     type: "info",
-     showCancelButton: true,
-     closeOnConfirm: false,
-     showLoaderOnConfirm: true,
-     },
-     function () {
+   sweetAlert({
+   title: "Ajax request example",
+   text: "Submit to run ajax request",
+   type: "info",
+   showCancelButton: true,
+   closeOnConfirm: false,
+   showLoaderOnConfirm: true,
+   },
+   function () {
 
-     // We can also pass the url value separately from ajaxurl for front end AJAX implementations
-     jQuery.post(ajax_object.ajax_url, data, function (response) {
+   // We can also pass the url value separately from ajaxurl for front end AJAX implementations
+   jQuery.post(ajax_object.ajax_url, data, function (response) {
 
-     $('#form_update_ouput').html(response);
+   $('#form_update_ouput').html(response);
 
-     setTimeout(function () {
-     swal("Ajax request: " + response);
-     });
-     //alert('seRespon ' + response);
-     });
-     });
-     });*/
+   setTimeout(function () {
+   swal("Ajax request: " + response);
+   });
+   //alert('seRespon ' + response);
+   });
+   });
+   });*/
 
+  /*
+   swal({
+   title: "Are you sure?",
+   text: "You will not be able to recover this imaginary file!",
+   type: "warning",
+   showCancelButton: true,
+   confirmButtonColor: "#DD6B55",
+   confirmButtonText: "Yes, delete it!",
+   cancelButtonText: "No, cancel plx!",
+   closeOnConfirm: false,
+   closeOnCancel: false
+   },
+   function(isConfirm){
+   if (isConfirm) {
+   swal("Deleted!", "Your imaginary file has been deleted.", "success");
+   } else {
+   swal("Cancelled", "Your imaginary file is safe :)", "error");
+   }
+   });
 
-    /*
-     swal({
-     title: "Are you sure?",
-     text: "You will not be able to recover this imaginary file!",
-     type: "warning",
-     showCancelButton: true,
-     confirmButtonColor: "#DD6B55",
-     confirmButtonText: "Yes, delete it!",
-     cancelButtonText: "No, cancel plx!",
-     closeOnConfirm: false,
-     closeOnCancel: false
-     },
-     function(isConfirm){
-     if (isConfirm) {
-     swal("Deleted!", "Your imaginary file has been deleted.", "success");
-     } else {
-     swal("Cancelled", "Your imaginary file is safe :)", "error");
-     }
-     });
-
-     swal({
-     title: "Ajax request example",
-     text: "Submit to run ajax request",
-     type: "info",
-     showCancelButton: true,
-     closeOnConfirm: false,
-     showLoaderOnConfirm: true,
-     },
-     function(){
-     setTimeout(function(){
-     swal("Ajax request finished!");
-     }, 2000);
-     });
-     */
+   swal({
+   title: "Ajax request example",
+   text: "Submit to run ajax request",
+   type: "info",
+   showCancelButton: true,
+   closeOnConfirm: false,
+   showLoaderOnConfirm: true,
+   },
+   function(){
+   setTimeout(function(){
+   swal("Ajax request finished!");
+   }, 2000);
+   });
+   */
 
 });
 
-jQuery(function ($) {
-
+jQuery(function($) {
 
 });
 
@@ -211,7 +212,7 @@ jQuery(function ($) {
  *JavaScript listening to the post-load event:
  */
 jQuery(document.body).trigger('post-load');
-jQuery(document.body).on('post-load', function () {
-    // New posts have been added to the page.
-    console.log('posts');
+jQuery(document.body).on('post-load', function() {
+  // New posts have been added to the page.
+  console.log('posts');
 });
