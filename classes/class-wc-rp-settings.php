@@ -38,7 +38,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function init(): void {
+	public function init() {
 
 		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ] );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
@@ -63,7 +63,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 * /**
 	 * Add options page
 	 */
-	public function wc_bom_menu(): void {
+	public function wc_bom_menu() {
 
 		add_submenu_page(
 			'tools.php',
@@ -79,7 +79,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Register and add settings
 	 */
-	public function page_init(): void {
+	public function page_init() {
 
 		register_setting(
 			'wc_bom_settings_group', // Option group
@@ -106,7 +106,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Print the Section text
 	 */
-	public function settings_info(): void { ?>
+	public function settings_info() { ?>
         <div id="plugin-info-header" class="plugin-info header">
             <div class="plugin-info content">
             </div>
@@ -117,7 +117,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Options page callback
 	 */
-	public function settings_page(): void {
+	public function settings_page() {
 
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( WC_BOM_SETTINGS );
@@ -183,7 +183,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_admin(): void {
+	public function wco_admin() {
 
 
 		$ajax_data = $this->get_data();
@@ -202,7 +202,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * @return array
 	 */
-	public function get_data(): array {
+	public function get_data() {
 
 		$args = [
 			'post_type'   => 'product',
@@ -222,7 +222,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_ajax(): void {
+	public function wco_ajax() {
 
 		//global $wpdb;
 		check_ajax_referer( 'ajax_nonce', 'security' );
@@ -254,7 +254,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return array
 	 */
-	public function sanitize( $input ): array {
+	public function sanitize( $input ) {
 
 		//$new_input = [];
 		//if ( isset( $input['license_key'] ) ) {
@@ -270,7 +270,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function build_settings(): void {
+	public function build_settings() {
 		$this->settings_sidebar();
 		$this->settings_callback();
 		//$this->settings_save();
@@ -279,7 +279,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function settings_sidebar(): void { ?>
+	public function settings_sidebar() { ?>
         <div id="postbox-container-1" class="postbox-container">
 
             <div id="normal-sortables" class="meta-box-sortables">
@@ -316,7 +316,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Get the settings option array and print one of its values
 	 */
-	public function settings_callback(): void {
+	public function settings_callback() {
 
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( 'wc_bom_settings' );
@@ -352,7 +352,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * @return string
 	 */
-	public function settings_fields(): string {
+	public function settings_fields() {
 		global $wc_bom_settings;
 
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
@@ -527,7 +527,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return string
 	 */
-	public function format_key( $text ): string {
+	public function format_key( $text ) {
 		$str = str_replace( [ '-', ' ' ], '_', $text );
 
 		return strtolower( $str );
@@ -537,7 +537,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function settings_save(): void {
+	public function settings_save() {
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
         <tr>

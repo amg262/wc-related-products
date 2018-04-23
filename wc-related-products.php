@@ -35,30 +35,18 @@ class WC_Related_Products {
 	}
 
 	/**
-	 * @return null
-	 */
-	public static function getInstance() {
-
-		if ( static::$instance === null ) {
-			static::$instance = new static;
-		}
-
-		return static::$instance;
-	}
-
-	/**
 	 * WC_Related_Products constructor.
 	 */
 	public function init() {
 
-		include_once( __DIR__ . '/classes/class-wc-rp-settings.php' );
+		include_once __DIR__ . '/classes/class-wc-rp-settings.php';
 		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
 
-		$rp_prioirty  = ( isset( $opts['related_priority'] ) ) ? (int) $opts['related_priority'] : 15;
-		$up_priority  = ( isset( $opts['upsell_priority'] ) ) ? (int) $opts['upsell_priority'] : 15;
-		$cs_prioirity = ( isset( $opts['crosssell_priority'] ) ) ? (int) $opts['crosssell_priority'] : 20;
+		$rp_prioirty  = isset( $opts['related_priority'] ) ? (int) $opts['related_priority'] : 15;
+		$up_priority  = isset( $opts['upsell_priority'] ) ? (int) $opts['upsell_priority'] : 15;
+		$cs_prioirity = isset( $opts['crosssell_priority'] ) ? (int) $opts['crosssell_priority'] : 20;
 
 
 		add_action( 'init', [ $this, 'load_assets' ] );
@@ -84,6 +72,18 @@ class WC_Related_Products {
 		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 
 
+	}
+
+	/**
+	 * @return null
+	 */
+	public static function getInstance() {
+
+		if ( static::$instance === null ) {
+			static::$instance = new static;
+		}
+
+		return static::$instance;
 	}
 
 	/**
@@ -177,7 +177,7 @@ class WC_Related_Products {
                            value="<?php echo implode( ',', array_keys( $json_ids ) ); ?>"/>
                     <img class="help_tip"
                          data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
-                         src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/>
+                         src="<?php echo wc()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/>
                 </p>
 			<?php else: ?>
                 <p class="form-field"><label for="related_ids"><?php _e( 'Related Products', 'woocommerce' ); ?></label>
@@ -195,7 +195,7 @@ class WC_Related_Products {
                     </select>
                     <img class="help_tip"
                          data-tip='<?php _e( 'Related products are displayed on the product detail page.', 'woocommerce' ) ?>'
-                         src="<?php echo WC()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/></p>
+                         src="<?php echo wc()->plugin_url(); ?>/assets/images/help.png" height="16" width="16"/></p>
 			<?php endif; ?>
         </div>
 		<?php
@@ -214,7 +214,7 @@ class WC_Related_Products {
 			// From 2.3 until the release before 3.0 Woocommerce posted these as a comma-separated string.
 			// Before and after, they are posted as an array of IDs.
 			if ( $woocommerce->version >= '2.3' && $woocommerce->version < '3.0' ) {
-				$related = isset( $_POST['related_ids'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['related_ids'] ) ) ) : [];
+				$related = isset( $_POST['related_ids'] ) ? array_filter( array_map( '\intval', explode( ',', $_POST['related_ids'] ) ) ) : [];
 			} else {
 				$related = [];
 				$ids     = $_POST['related_ids'];
@@ -239,7 +239,7 @@ class WC_Related_Products {
 	 *
 	 * @return array Modified query arguments.
 	 */
-	function wc_rp_filter_related_products_legacy( $args ) {
+	public function wc_rp_filter_related_products_legacy( $args ) {
 		global $post;
 		$related = get_post_meta( $post->ID, '_related_ids', true );
 		if ( $related ) { // remove category based filtering
@@ -307,10 +307,10 @@ class WC_Related_Products {
 	public function custom_woocommerce_upsell_display_args( $args ) {
 
 		$opts      = get_option( WC_BOM_SETTINGS );
-		$is_active = ( isset( $opts['show_upsells'] ) ) ? (bool) $opts['show_upsells'] : false;
+		$is_active = isset( $opts['show_upsells'] ) ? (bool) $opts['show_upsells'] : false;
 
-		$limit = ( isset( $opts['upsell_columns'] ) ) ? (int) $opts['upsell_columns'] : 2;
-		$cols  = ( isset( $opts['upsell_limit'] ) ) ? (int) $opts['upsell_limit'] : 2;
+		$limit = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 2;
+		$cols  = isset( $opts['upsell_limit'] ) ? (int) $opts['upsell_limit'] : 2;
 
 		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols; //change number of upsells here
@@ -321,26 +321,31 @@ class WC_Related_Products {
 	/**
 	 *
 	 */
-	function redisplay_cross() {
+	public function redisplay_cross() {
 
 
 		$opts      = get_option( WC_BOM_SETTINGS );
-		$is_active = ( isset( $opts['show_crosssells'] ) ) ? (bool) $opts['show_crosssells'] : false;
+		$is_active = isset( $opts['show_crosssells'] ) ? (bool) $opts['show_crosssells'] : false;
 
 		if ( $is_active === true ) {
-			$cols  = ( isset( $opts['crosssell_columns'] ) ) ? (int) $opts['crosssell_columns'] : 2;
-			$limit = ( isset( $opts['crosssell_limit'] ) ) ? (int) $opts['crosssell_limit'] : 2;
+			$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 2;
+			$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 2;
 
 			woocommerce_cross_sell_display( $limit, $cols );
 		}
 
 	}
 
+	/**
+	 * @param $columns
+	 *
+	 * @return int
+	 */
 	public function change_cross_sells_columns( $columns ) {
 		$opts = get_option( WC_BOM_SETTINGS );
 
-		$cols  = ( isset( $opts['crosssell_columns'] ) ) ? (int) $opts['crosssell_columns'] : 2;
-		$limit = ( isset( $opts['crosssell_limit'] ) ) ? (int) $opts['crosssell_limit'] : 2;
+		$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 2;
+		$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 2;
 
 
 		return $cols;

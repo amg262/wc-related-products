@@ -9,7 +9,7 @@
     "build": "gulp build",
     "clean": "gulp clean",
     "watch": "gulp serve",
-    "postinstall": "gulp live"
+    "postinstall": "gulp clean"
   },
   "repository": {
     "type": "git",
