@@ -39,14 +39,17 @@ class WC_Related_Products {
 	 */
 	public function init() {
 
+
 		include_once __DIR__ . '/classes/class-wc-rp-settings.php';
 		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
+
 
 		$rp_prioirty  = isset( $opts['related_priority'] ) ? (int) $opts['related_priority'] : 15;
 		$up_priority  = isset( $opts['upsell_priority'] ) ? (int) $opts['upsell_priority'] : 15;
 		$cs_prioirity = isset( $opts['crosssell_priority'] ) ? (int) $opts['crosssell_priority'] : 20;
 
+		//add_action('admin_init', [$this, 'del']);
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
@@ -71,6 +74,9 @@ class WC_Related_Products {
 		//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 	}
 
+	public function del() {
+		delete_post_meta_by_key( '_related_ids' );
+    }
 	/**
 	 * @return null
 	 */
@@ -81,6 +87,12 @@ class WC_Related_Products {
 		}
 
 		return static::$instance;
+	}
+
+	public function activate() {
+		//register_activation_hook( __FILE__, [ $this, 'wpa_install' ] );
+		//register_deactivation_hook( __FILE__, [ $this, 'wpa_uninstall' ]);
+
 	}
 
 	/**
@@ -316,8 +328,8 @@ class WC_Related_Products {
 		///}
 
 		//ar_dump($args);
-		var_dump( $limit );
-		var_dump( $cols );
+		//var_dump( $limit );
+		//var_dump( $cols );
 
 		//woocommerce_cross_sell_display( $limit, $cols );
 		return $args;

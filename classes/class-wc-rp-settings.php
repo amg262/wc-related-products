@@ -513,6 +513,19 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         <div id="wcrp-support">
             <table class="form-table">
                 <tbody>
+                <tr><?php $label = 'Delete Related IDs';
+	                $key         = $this->format_key( $label );
+	                $obj         = $wc_bom_settings[ $key ]; ?>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
+                    <td><button id="wcrp_del_rel_ids">Delete</button>
+
+                        <input type="text"
+                               title="wc_bom_settings[<?php _e( $key ); ?>]"
+                               id="wc_bom_settings[<?php _e( $key ); ?>]"
+                               name="wc_bom_settings[<?php _e( $key ); ?>]"
+                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                    </td>
+                </tr>
 
                 </tbody>
             </table>
