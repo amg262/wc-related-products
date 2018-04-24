@@ -52,7 +52,8 @@ class WC_Related_Products {
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], $rp_prioirty );
 		//add_action( 'woocommerce_after_single_product_summary', 'replay_upsells', 15 );
-		add_filter( 'woocommerce_upsell_display_args', [ $this, 'custom_woocommerce_upsell_display_args' ] );
+		add_filter( 'woocommerce_upsell_display_args', [ $this, 'wc_upsell_display_args', ], $up_priority );
+
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_cross' ], $cs_prioirity );
 
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
@@ -67,7 +68,7 @@ class WC_Related_Products {
 		add_filter( 'woocommerce_product_related_posts_relate_by_tag', [ $this, 'wc_rp_taxonomy_rel' ], 10, 2 );
 		add_filter( 'woocommerce_product_related_posts_force_display', [ $this, 'wc_rp_force_display' ], 10, 2 );
 		add_action( 'woocommerce_product_options_related', [ $this, 'wc_rp_select_related_products' ] );
-		remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+		//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 	}
 
 	/**
@@ -271,9 +272,11 @@ class WC_Related_Products {
 	 *
 	 */
 	public function redisplay_related() {
-
-		woocommerce_output_related_products();
-
+		$opts      = get_option( WC_BOM_SETTINGS );
+		$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
+		if ( $is_active === true ) {
+			woocommerce_output_related_products();
+		}
 	}
 
 	/**
@@ -285,9 +288,8 @@ class WC_Related_Products {
 
 		$sets = get_option( 'wc_bom_settings' );
 
-
 		$cols  = ( $sets['related_columns'] > 0 ) ? (int) $sets['related_columns'] : 'fuck';
-		$limit = ( $sets['related_limit'] > 0 ) ? (int) $sets['limit'] : 'fuck';
+		$limit = ( $sets['related_limit'] > 0 ) ? (int) $sets['related_limit'] : 'fuck';
 
 		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols;
@@ -300,17 +302,24 @@ class WC_Related_Products {
 	 *
 	 * @return mixed
 	 */
-	public function custom_woocommerce_upsell_display_args( $args ) {
+	public function wc_upsell_display_args( $args ) {
 
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_upsells'] ) ? (bool) $opts['show_upsells'] : false;
 
-		$limit = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 2;
-		$cols  = isset( $opts['upsell_limit'] ) ? (int) $opts['upsell_limit'] : 2;
+		////if ( $is_active === true ) {
+		$limit = isset( $opts['upsell_limit'] ) ? (int) $opts['upsell_columns'] : 2;
+		$cols  = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 2;
 
 		$args['posts_per_page'] = $limit;
 		$args['columns']        = $cols; //change number of upsells here
+		///}
 
+		//ar_dump($args);
+		var_dump( $limit );
+		var_dump( $cols );
+
+		//woocommerce_cross_sell_display( $limit, $cols );
 		return $args;
 	}
 
@@ -319,17 +328,15 @@ class WC_Related_Products {
 	 */
 	public function redisplay_cross() {
 
-
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_crosssells'] ) ? (bool) $opts['show_crosssells'] : false;
 
 		if ( $is_active === true ) {
-			$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 2;
-			$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 2;
+			$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
+			$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 4;
 
-			woocommerce_cross_sell_display( $limit, $cols );
+			//woocommerce_cross_sell_display( $limit, $cols );
 		}
-
 	}
 
 	/**
@@ -340,9 +347,8 @@ class WC_Related_Products {
 	public function change_cross_sells_columns( $columns ) {
 		$opts = get_option( WC_BOM_SETTINGS );
 
-		$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 2;
-		$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 2;
-
+		$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
+		$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 4;
 
 		return $cols;
 	}
@@ -432,6 +438,8 @@ class WC_Related_Products {
 			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.jquery.min.js', [ 'jquery' ] );
 		wp_register_style( 'chosen_css',
 			'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.7.0/chosen.min.css' );
+		wp_enqueue_script( 'sweetalertjs', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js' );
+		wp_enqueue_style( 'sweetalert_css', 'https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css' );
 		wp_enqueue_script( 'postbox' );
 		wp_enqueue_script( 'bom_adm_js' );
 		wp_enqueue_script( 'chosen_js' );

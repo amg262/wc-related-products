@@ -142,7 +142,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     <a id="wcrp-nav-options" href="#options" class="nav-tab
                     <?php echo $active_tab === 'options' ? 'nav-tab-active' : ''; ?>">Options</a>
 
-                    <a id="wcrp-nav-settings" href="#support" class="nav-tab
+                    <a id="wcrp-nav-support" href="#support" class="nav-tab
                     <?php echo $active_tab === 'support' ? 'nav-tab-active' : ''; ?>">Support</a>
                 </h2>
 				<?php ?>
@@ -359,16 +359,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         <div id="wcrp-settings">
             <table class="form-table">
                 <tbody>
-                <tr>
-					<?php $label = 'Enable Beta'; ?>
-					<?php $key = $this->format_key( $label ); ?>
-					<?php $opt = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="checkbox" id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
-                </tr>
+
 
                 <tr><?php $label = 'Header Text';
 					$key         = $this->format_key( $label );
@@ -394,7 +385,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'Related Columns';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -405,7 +396,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'Related Limit';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -416,7 +407,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'Related Priority';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -443,7 +434,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'UpSell Columns';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -454,7 +445,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'UpSell Limit';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -465,7 +456,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'UpSell Priority';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -486,7 +477,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'CrossSell Columns';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -497,7 +488,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'CrossSell Limit';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -508,7 +499,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <tr><?php $label = 'CrossSell Priority';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $id ); ?>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -519,6 +510,14 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 </tbody>
             </table>
         </div>
+        <div id="wcrp-support">
+            <table class="form-table">
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
 		<?php return 'hi';
 	}
 
