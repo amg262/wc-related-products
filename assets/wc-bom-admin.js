@@ -26,8 +26,8 @@ jQuery(document).ready(function($) {
 
   //var bar = new ProgressBar.Line('#container', {easing: 'easeInOut'});
   //bar.animate(1);  // Value from 0.0 to 1.0
-  $('#wcrp-options').css('display', 'none');
-  $('#wcrp-support').css('display', 'none');
+  //$('#wcrp-options').css('display', 'none');
+  //$('#wcrp-support').css('display', 'none');
   //alert('hi');
 
   $('#wcrp-nav-settings').click(function() {

@@ -298,12 +298,14 @@ class WC_Related_Products {
 	 */
 	public function wc_change_number_related_products( $args ) {
 
-		$sets = get_option( 'wc_bom_settings' );
+		$opts = get_option( 'wc_bom_settings' );
+		//$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
+		////if ( $is_active === true ) {
 
-		$cols  = ( $sets['related_columns'] > 0 ) ? (int) $sets['related_columns'] : 'fuck';
-		$limit = ( $sets['related_limit'] > 0 ) ? (int) $sets['related_limit'] : 'fuck';
+		$total  = isset( $opts['related_total'] ) ? (int) $opts['related_total'] : 4;
+		$cols  = isset( $opts['related_columns'] ) ? (int) $opts['related_columns'] : 4;
 
-		$args['posts_per_page'] = $limit;
+		$args['posts_per_page'] = $total;
 		$args['columns']        = $cols;
 
 		return $args;
@@ -320,10 +322,10 @@ class WC_Related_Products {
 		$is_active = isset( $opts['show_upsells'] ) ? (bool) $opts['show_upsells'] : false;
 
 		////if ( $is_active === true ) {
-		$limit = isset( $opts['upsell_limit'] ) ? (int) $opts['upsell_columns'] : 2;
-		$cols  = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 2;
+		$total  = isset( $opts['upsell_total'] ) ? (int) $opts['upsell_total'] : 4;
+		$cols  = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 4;
 
-		$args['posts_per_page'] = $limit;
+		$args['posts_per_page'] = $total;
 		$args['columns']        = $cols; //change number of upsells here
 		///}
 
@@ -344,8 +346,8 @@ class WC_Related_Products {
 		$is_active = isset( $opts['show_crosssells'] ) ? (bool) $opts['show_crosssells'] : false;
 
 		if ( $is_active === true ) {
-			$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
-			$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 4;
+			$cols  = isset( $opts['crosssell_total'] ) ? (int) $opts['crosssell_total'] : 4;
+			$limit = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
 
 			//woocommerce_cross_sell_display( $limit, $cols );
 		}
