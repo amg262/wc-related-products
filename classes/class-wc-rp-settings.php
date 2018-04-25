@@ -137,6 +137,9 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <div id="icon-themes" class="icon32">&nbps;</div>
 				<?php ?>
                 <h2 class="nav-tab-wrapper">
+                    <a id="wcrp-nav-all" href="#all" class="nav-tab
+                    <?php echo $active_tab === 'all' ? 'nav-tab-active' : ''; ?>">All</a>
+
                     <a id="wcrp-nav-related" href="#related" class="nav-tab
                     <?php echo $active_tab === 'related' ? 'nav-tab-active' : ''; ?>">Related</a>
 
@@ -154,7 +157,11 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     <div id="poststuff">
 
                         <div id="post-body" class="metabox-holder columns-2">
-							<?php if ( $active_tab === 'related' || $active_tab === null ) {
+							<?php if ( $active_tab === 'all' || $active_tab === null ){
+								settings_fields( 'wc_bom_settings_group' );
+								do_settings_sections( 'wc-bom-settings-admin' );
+								submit_button( 'Save Settings' );
+                            } elseif ( $active_tab === 'related' || $active_tab === null ) {
 
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
@@ -174,7 +181,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
-							}// end if/else//wc_bom_options_group2
+							}
 							?>
                         </div>
                     </div>

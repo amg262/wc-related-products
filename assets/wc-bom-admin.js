@@ -29,7 +29,19 @@ jQuery(document).ready(function($) {
   //$('#wcrp-options').css('display', 'none');
   //$('#wcrp-support').css('display', 'none');
   //alert('hi');
+  $('#wcrp-nav-all').click(function() {
+    //alert('hi');
+    $('#wcrp-related').css('display', 'block');
+    $('#wcrp-upsells').css('display', 'block');
+    $('#wcrp-crosssells').css('display', 'block');
+    $('#wcrp-settings').css('display', 'block');
 
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+  });
   $('#wcrp-nav-related').click(function() {
     //alert('hi');
     $('#wcrp-related').css('display', 'block');
@@ -42,6 +54,8 @@ jQuery(document).ready(function($) {
     $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-all').attr('class', 'nav-tab', 'nav-tab');
+
   });
 
   $('#wcrp-nav-upsells').click(function() {
@@ -56,6 +70,8 @@ jQuery(document).ready(function($) {
     // $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-all').attr('class', 'nav-tab', 'nav-tab');
+
   });
 
   $('#wcrp-nav-crosssells').click(function() {
@@ -70,6 +86,8 @@ jQuery(document).ready(function($) {
     $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
     // $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-all').attr('class', 'nav-tab', 'nav-tab');
+
   });
 
   $('#wcrp-nav-settings').click(function() {
@@ -83,6 +101,8 @@ jQuery(document).ready(function($) {
     $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
     $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-all').attr('class', 'nav-tab', 'nav-tab');
+
     //$('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
   });
 
