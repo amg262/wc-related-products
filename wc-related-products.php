@@ -53,11 +53,12 @@ class WC_Related_Products {
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
 		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
-		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_related' ], $rp_prioirty );
+
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'wc_output_related_products' ], $rp_prioirty );
 		//add_action( 'woocommerce_after_single_product_summary', 'replay_upsells', 15 );
 		add_filter( 'woocommerce_upsell_display_args', [ $this, 'wc_upsell_display_args', ], $up_priority );
 
-		add_action( 'woocommerce_after_single_product_summary', [ $this, 'redisplay_cross' ], $cs_prioirity );
+		add_action( 'woocommerce_after_single_product_summary', [ $this, 'wc_output_cross_sell' ], 30 );
 
 		add_filter( 'woocommerce_product_related_posts_query', [ $this, 'wc_rp_filter_related_products' ], 20, 2 );
 		add_filter( 'woocommerce_related_products_args', [ $this, 'wc_rp_filter_related_products_legacy' ] );
@@ -74,9 +75,6 @@ class WC_Related_Products {
 		//remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 	}
 
-	public function del() {
-		delete_post_meta_by_key( '_related_ids' );
-    }
 	/**
 	 * @return null
 	 */
@@ -87,6 +85,10 @@ class WC_Related_Products {
 		}
 
 		return static::$instance;
+	}
+
+	public function del() {
+		delete_post_meta_by_key( '_related_ids' );
 	}
 
 	public function activate() {
@@ -283,7 +285,7 @@ class WC_Related_Products {
 	/**
 	 *
 	 */
-	public function redisplay_related() {
+	public function wc_output_related_products() {
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
 		if ( $is_active === true ) {
@@ -302,7 +304,7 @@ class WC_Related_Products {
 		//$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
 		////if ( $is_active === true ) {
 
-		$total  = isset( $opts['related_total'] ) ? (int) $opts['related_total'] : 4;
+		$total = isset( $opts['related_total'] ) ? (int) $opts['related_total'] : 4;
 		$cols  = isset( $opts['related_columns'] ) ? (int) $opts['related_columns'] : 4;
 
 		$args['posts_per_page'] = $total;
@@ -322,7 +324,7 @@ class WC_Related_Products {
 		$is_active = isset( $opts['show_upsells'] ) ? (bool) $opts['show_upsells'] : false;
 
 		////if ( $is_active === true ) {
-		$total  = isset( $opts['upsell_total'] ) ? (int) $opts['upsell_total'] : 4;
+		$total = isset( $opts['upsell_total'] ) ? (int) $opts['upsell_total'] : 4;
 		$cols  = isset( $opts['upsell_columns'] ) ? (int) $opts['upsell_columns'] : 4;
 
 		$args['posts_per_page'] = $total;
@@ -340,16 +342,16 @@ class WC_Related_Products {
 	/**
 	 *
 	 */
-	public function redisplay_cross() {
+	public function wc_output_cross_sell() {
 
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_crosssells'] ) ? (bool) $opts['show_crosssells'] : false;
 
 		if ( $is_active === true ) {
-			$cols  = isset( $opts['crosssell_total'] ) ? (int) $opts['crosssell_total'] : 4;
-			$limit = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
+			$total = isset( $opts['crosssell_total'] ) ? (int) $opts['crosssell_total'] : 4;
+			$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
 
-			//woocommerce_cross_sell_display( $limit, $cols );
+			woocommerce_cross_sell_display( $total, $cols );
 		}
 	}
 
@@ -361,8 +363,8 @@ class WC_Related_Products {
 	public function change_cross_sells_columns( $columns ) {
 		$opts = get_option( WC_BOM_SETTINGS );
 
+		$total = isset( $opts['crosssell_total'] ) ? (int) $opts['crosssell_total'] : 4;
 		$cols  = isset( $opts['crosssell_columns'] ) ? (int) $opts['crosssell_columns'] : 4;
-		$limit = isset( $opts['crosssell_limit'] ) ? (int) $opts['crosssell_limit'] : 4;
 
 		return $cols;
 	}
