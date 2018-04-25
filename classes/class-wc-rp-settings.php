@@ -44,6 +44,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		add_action( 'admin_init', [ $this, 'page_init' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'wco_admin' ] );
 		add_action( 'wp_ajax_wco_ajax', [ $this, 'wco_ajax' ] );
+
 		//add_action( 'wp_ajax_nopriv_wco_ajax', [ $this, 'wco_ajax' ] );
 	}
 
@@ -136,40 +137,43 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 <div id="icon-themes" class="icon32">&nbps;</div>
 				<?php ?>
                 <h2 class="nav-tab-wrapper">
+                    <a id="wcrp-nav-related" href="#related" class="nav-tab
+                    <?php echo $active_tab === 'related' ? 'nav-tab-active' : ''; ?>">Related</a>
+
+                    <a id="wcrp-nav-upsells" href="#upsells" class="nav-tab
+                    <?php echo $active_tab === 'upsells' ? 'nav-tab-active' : ''; ?>">UpSells</a>
+
+                    <a id="wcrp-nav-crosssells" href="#crosssells" class="nav-tab
+                    <?php echo $active_tab === 'crosssells' ? 'nav-tab-active' : ''; ?>">CrossSells</a>
+
                     <a id="wcrp-nav-settings" href="#settings" class="nav-tab
                     <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
-
-                    <a id="wcrp-nav-options" href="#options" class="nav-tab
-                    <?php echo $active_tab === 'options' ? 'nav-tab-active' : ''; ?>">Options</a>
-
-                    <a id="wcrp-nav-support" href="#support" class="nav-tab
-                    <?php echo $active_tab === 'support' ? 'nav-tab-active' : ''; ?>">Support</a>
                 </h2>
 				<?php ?>
                 <form method="post" action="options.php">
                     <div id="poststuff">
 
                         <div id="post-body" class="metabox-holder columns-2">
-							<?php if ( $active_tab === 'settings' || $active_tab === null ) {
-
-
-								settings_fields( 'wc_bom_settings_group' );
-								do_settings_sections( 'wc-bom-settings-admin' );
-								submit_button( 'Save Settings' );
-							} elseif ( $active_tab === 'options' ) {
+							<?php if ( $active_tab === 'related' || $active_tab === null ) {
 
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
-								//echo 'hi';
-								//settings_fields( 'wc_bom_options_group' );
-								//do_settings_sections( 'wc-bom-options-admin' );
-								//submit_button( 'Save Options' );
-							} elseif ( $active_tab === 'support' ) {
+							} elseif ( $active_tab === 'upsells' ) {
+
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
 
+							} elseif ( $active_tab === 'crosssells' ) {
+								settings_fields( 'wc_bom_settings_group' );
+								do_settings_sections( 'wc-bom-settings-admin' );
+								submit_button( 'Save Settings' );
+
+							} elseif ( $active_tab === 'settings' ) {
+								settings_fields( 'wc_bom_settings_group' );
+								do_settings_sections( 'wc-bom-settings-admin' );
+								submit_button( 'Save Settings' );
 							}// end if/else//wc_bom_options_group2
 							?>
                         </div>
@@ -183,7 +187,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_admin() {
+	public
+	function wco_admin() {
 
 
 		$ajax_data = $this->get_data();
@@ -202,7 +207,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * @return array
 	 */
-	public function get_data() {
+	public
+	function get_data() {
 
 		$args = [
 			'post_type'   => 'product',
@@ -222,7 +228,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function wco_ajax() {
+	public
+	function wco_ajax() {
 
 		//global $wpdb;
 		check_ajax_referer( 'ajax_nonce', 'security' );
@@ -261,7 +268,10 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return array
 	 */
-	public function sanitize( $input ) {
+	public
+	function sanitize(
+		$input
+	) {
 
 		//$new_input = [];
 		//if ( isset( $input['license_key'] ) ) {
@@ -277,7 +287,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function build_settings() {
+	public
+	function build_settings() {
 		$this->settings_sidebar();
 		$this->settings_callback();
 		//$this->settings_save();
@@ -286,7 +297,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function settings_sidebar() { ?>
+	public
+	function settings_sidebar() { ?>
         <div id="postbox-container-1" class="postbox-container">
 
             <div id="normal-sortables" class="meta-box-sortables">
@@ -323,7 +335,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * Get the settings option array and print one of its values
 	 */
-	public function settings_callback() {
+	public
+	function settings_callback() {
 
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( 'wc_bom_settings' );
@@ -342,13 +355,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     </button>
                     <h2 class='hndle'><span>General</span></h2>
                     <div class="inside acf-fields -left">
-                        <div><?php settings_errors(); ?></div>
+						<?php settings_errors(); ?>
 						<?php $this->settings_fields(); ?>
-						<?php// $this->settings_save(); ?>
-                        <div class="settings_ajax_wrap"><span id="yeahbtn" class="button secondary"> Yeah</span><span
-                                    id="feedme"><br></span>
-							<?php //submit_button( 'Save Options' ); ?>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -358,15 +366,15 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * @return string
 	 */
-	public function settings_fields() {
+	public
+	function settings_fields() {
 		global $wc_bom_settings;
 
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
-        <div id="wcrp-settings">
+
+        <div id="wcrp-related">
             <table class="form-table">
                 <tbody>
-
-
                 <tr><?php $label = 'Header Text';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
@@ -389,10 +397,10 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
                 </tr>
                 <tr><?php $label = 'Related Total';
-	                $key         = $this->format_key( $label );
-	                $obj         = $wc_bom_settings[ $key ]; ?>
+					$key         = $this->format_key( $label );
+					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -403,7 +411,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -415,7 +423,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -425,7 +433,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 </tbody>
             </table>
         </div>
-        <div id="wcrp-options">
+        <div id="wcrp-upsells">
             <table class="form-table">
                 <tbody>
                 <tr>
@@ -442,7 +450,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -453,7 +461,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -465,13 +473,19 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
                                value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
                     </td>
                 </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="wcrp-crosssells">
+            <table class="form-table">
+                <tbody>
                 <tr>
 					<?php $label = 'Show CrossSells'; ?>
 					<?php $key = $this->format_key( $label ); ?>
@@ -486,7 +500,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -497,7 +511,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -508,7 +522,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
+                    <td><input type="number"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
@@ -518,93 +532,21 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 </tbody>
             </table>
         </div>
-        <div id="wcrp-support">
+        <div id="wcrp-settings">
             <table class="form-table">
                 <tbody>
                 <tr>
-					<?php $label = 'Form Update'; ?>
-					<?php $key = $this->format_key( $label ); ?>
-					<?php $opt = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><span class="button secondary" id="form_ajax_update"
-                              name="wc_bom_settings[<?php _e( $key ); ?>]" value="yeah">Yeah</span>
-                        <div class="form_update_ouput"><p><strong><span
-                                            id="form_update_ouput"><br></span></strong></p></div>
-                        <div><span class="button primary" id="button_hit" name="button_hit">
-                                           Generate Data
-                                       </span>
-                            <div><span id="button_out"><hr></span></div>
-                            <div><select id="prod-select" name="prod-select"
-                                         data-placeholder="Select Your Options"
-                                         class="prod-select chosen-select">
-									<?php //var_dump( $this->get_data() );
-
-									foreach ( $this->get_data() as $arr ) {
-
-										$id   = $arr['id'];
-										$text = $arr['text'];
-										$opts .= '<option id="' . $id . '" ' .
-										         'value="' . $text . '"">' .
-										         $text .
-										         '</option>';
-										echo $opts;
-									}
-									//var_dump( $opts ); ?>
-                                </select>
-								<?php $label = 'Prod Bom'; ?>
-								<?php $key = $this->format_key( $label ); ?>
-								<?php $opt = $wc_bom_settings[ $key ]; ?>
-                                <input type="hidden"
-                                       id="<?php _e( $key ); ?> "
-                                       name="<?php _e( $key ); ?> "
-                                       value="<?php echo $key; ?>"/></div>
-                            <div><span id="prod_output" name="prod_output"><strong>Prod</strong></span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-		<?php return 'hi';
-	}
-
-	/**
-	 * @param $text
-	 *
-	 * @return string
-	 */
-	public function format_key( $text ) {
-		$str = str_replace( [ '-', ' ' ], '_', $text );
-
-		return strtolower( $str );
-	}
-
-
-	/**
-	 *
-	 */
-	public function settings_save() {
-		global $wc_bom_settings;
-		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
-        <tr>
-			<?php $label = 'Form Update'; ?>
-			<?php $key = $this->format_key( $label ); ?>
-			<?php $opt = $wc_bom_settings[ $key ]; ?>
-            <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-            <td><span class="button secondary" id="form_ajax_update"
-                      name="wc_bom_settings[<?php _e( $key ); ?>]" value="yeah">Yeah</span>
-                <div class="form_update_ouput"><p><strong><span
-                                    id="form_update_ouput"><br></span></strong></p></div>
-                <div><span class="button primary" id="button_hit" name="button_hit">
-                                           Generate Data
-                                       </span>
-                    <div><span id="button_out"><hr></span></div>
-                    <div><select id="prod-select" name="prod-select"
-                                 data-placeholder="Select Your Options"
-                                 class="prod-select chosen-select">
+					<?php $label = 'Action';
+					$key         = $this->format_key( $label );
+					$obj         = $wc_bom_settings[ $key ]; ?>
+                    <th scope="row"><label for="wcrp_prod_selection>"><?php _e( $label ); ?></label></th>
+                    <td>
+                    <span class="button primary" id="button_hit" name="button_hit">
+                        Generate Data
+                        </span>
+                        <select id="wcrp_prod_selection" name="wcrp_prod_selection"
+                                data-placeholder="Select Your Options"
+                                class="prod-select chosen-select">
 							<?php //var_dump( $this->get_data() );
 
 							foreach ( $this->get_data() as $arr ) {
@@ -625,12 +567,34 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                         <input type="hidden"
                                id="<?php _e( $key ); ?> "
                                name="<?php _e( $key ); ?> "
-                               value="<?php echo $key; ?>"/></div>
-                    <div><span id="prod_output" name="prod_output"><strong>Prod</strong></span>
-                    </div>
-                </div>
-            </td>
-        </tr>
-		<?php
+                               value="<?php echo $key; ?>"/>
+                    </td>
+                </tr>
+                <tr><?php ?>
+                    <th scope="row"></th>
+                    <td>
+                        <span id="prod_output" name="prod_output"><strong>Prod</strong></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+		<?php return 'hi';
 	}
+
+	/**
+	 * @param $text
+	 *
+	 * @return string
+	 */
+	public
+	function format_key(
+		$text
+	) {
+		$str = str_replace( [ '-', ' ' ], '_', $text );
+
+		return strtolower( $str );
+	}
+
 }

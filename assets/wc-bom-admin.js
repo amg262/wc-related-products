@@ -30,43 +30,63 @@ jQuery(document).ready(function($) {
   //$('#wcrp-support').css('display', 'none');
   //alert('hi');
 
+  $('#wcrp-nav-related').click(function() {
+    //alert('hi');
+    $('#wcrp-related').css('display', 'block');
+    $('#wcrp-upsells').css('display', 'none');
+    $('#wcrp-crosssells').css('display', 'none');
+    $('#wcrp-settings').css('display', 'none');
+
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+  });
+
+  $('#wcrp-nav-upsells').click(function() {
+    //alert('hi');
+    $('#wcrp-related').css('display', 'none');
+    $('#wcrp-upsells').css('display', 'block');
+    $('#wcrp-crosssells').css('display', 'none');
+    $('#wcrp-settings').css('display', 'none');
+
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
+    // $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+  });
+
+  $('#wcrp-nav-crosssells').click(function() {
+    //alert('hi');
+    $('#wcrp-related').css('display', 'none');
+    $('#wcrp-upsells').css('display', 'none');
+    $('#wcrp-crosssells').css('display', 'block');
+    $('#wcrp-settings').css('display', 'none');
+
+    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
+    $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
+    // $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
+  });
+
   $('#wcrp-nav-settings').click(function() {
     //alert('hi');
+    $('#wcrp-related').css('display', 'none');
+    $('#wcrp-upsells').css('display', 'none');
+    $('#wcrp-crosssells').css('display', 'none');
     $('#wcrp-settings').css('display', 'block');
-    $('#wcrp-options').css('display', 'none');
-    $('#wcrp-support').css('display', 'none');
-    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
-    $('#wcrp-nav-options').attr('class', 'nav-tab', 'nav-tab');
-    $('#wcrp-nav-support').attr('class', 'nav-tab', 'nav-tab');
-  });
 
-  $('#wcrp-nav-options').click(function() {
-    $('#wcrp-settings').css('display', 'none');
-    $('#wcrp-options').css('display', 'block');
-    $('#wcrp-support').css('display', 'none');
     $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
-    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
-    $('#wcrp-nav-support').attr('class', 'nav-tab', 'nav-tab');
-  });
-
-  $('#wcrp-nav-support').click(function() {
-    //alert('hi');
-    $('#wcrp-settings').css('display', 'none');
-    $('#wcrp-options').css('display', 'none');
-    $('#wcrp-support').css('display', 'block');
-    $(this).attr('class', 'nav-tab nav-tab-active', 'nav-tab nav-tab-active');
-    $('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
-    $('#wcrp-nav-options').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-related').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-upsells').attr('class', 'nav-tab', 'nav-tab');
+    $('#wcrp-nav-crosssells').attr('class', 'nav-tab', 'nav-tab');
+    //$('#wcrp-nav-settings').attr('class', 'nav-tab', 'nav-tab');
   });
 
   $('.chosen-select').chosen();
-
-  $('#prod-select').change(function() {
-    val = $('#prod-select').val();
-    $('#prod_select_chosen').attr('value', val);
-    console.log($('#prod_select_chosen').val());
-    console.log(val);
-  });
 
   //$("#form_field").chosen().change( … );
   //$("#form_field").trigger("chosen:updated");
@@ -103,112 +123,6 @@ jQuery(document).ready(function($) {
         });
 
   });
-
-  $('#form_ajax_update').click(function(e) {
-    var data = {
-      'url': ajax_object.ajax_url,
-      'action': 'wco_ajax',
-      'security': ajax_object.nonce,
-      'ajax_data': ajax_object.ajax_data,
-
-    };
-
-    console.log(data);
-
-    sweetAlert({
-          title: 'Ajax request example',
-          text: 'Submit to run ajax request',
-          type: 'info',
-          showCancelButton: true,
-          closeOnConfirm: false,
-          showLoaderOnConfirm: true,
-        },
-        function() {
-
-          // We can also pass the url value separately from ajaxurl for front end AJAX implementations
-          jQuery.post(ajax_object.ajax_url, data, function(response) {
-
-            $('#form_update_ouput').html(response);
-
-            setTimeout(function() {
-              swal('Ajax request: ' + response);
-            });
-            //alert('seRespon ' + response);
-          });
-        });
-  });
-  /*$('#form_ajax_update').click(function (e) {
-   var data = {
-   'url': ajax_object.ajax_url,
-   'action': 'wco_ajax',
-   'security': ajax_object.nonce,
-   'ajax_data': ajax_object.ajax_data,
-   'data': [],
-   'postdata': ['posts']
-   //'data':ajax_object     // We pass php values differently!
-   //'security':ajax_object.nonce
-   };
-
-   console.log(data);
-
-   sweetAlert({
-   title: "Ajax request example",
-   text: "Submit to run ajax request",
-   type: "info",
-   showCancelButton: true,
-   closeOnConfirm: false,
-   showLoaderOnConfirm: true,
-   },
-   function () {
-
-   // We can also pass the url value separately from ajaxurl for front end AJAX implementations
-   jQuery.post(ajax_object.ajax_url, data, function (response) {
-
-   $('#form_update_ouput').html(response);
-
-   setTimeout(function () {
-   swal("Ajax request: " + response);
-   });
-   //alert('seRespon ' + response);
-   });
-   });
-   });*/
-
-  /*
-   swal({
-   title: "Are you sure?",
-   text: "You will not be able to recover this imaginary file!",
-   type: "warning",
-   showCancelButton: true,
-   confirmButtonColor: "#DD6B55",
-   confirmButtonText: "Yes, delete it!",
-   cancelButtonText: "No, cancel plx!",
-   closeOnConfirm: false,
-   closeOnCancel: false
-   },
-   function(isConfirm){
-   if (isConfirm) {
-   swal("Deleted!", "Your imaginary file has been deleted.", "success");
-   } else {
-   swal("Cancelled", "Your imaginary file is safe :)", "error");
-   }
-   });
-
-   swal({
-   title: "Ajax request example",
-   text: "Submit to run ajax request",
-   type: "info",
-   showCancelButton: true,
-   closeOnConfirm: false,
-   showLoaderOnConfirm: true,
-   },
-   function(){
-   setTimeout(function(){
-   swal("Ajax request finished!");
-   }, 2000);
-   });
-   */
-
 });
 
 jQuery(function($) {
