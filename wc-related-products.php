@@ -87,29 +87,16 @@ class WC_Related_Products {
 		return static::$instance;
 	}
 
-	public function del() {
-		delete_post_meta_by_key( '_related_ids' );
-	}
-
-	public function activate() {
-		//register_activation_hook( __FILE__, [ $this, 'wpa_install' ] );
-		//register_deactivation_hook( __FILE__, [ $this, 'wpa_uninstall' ]);
-
-	}
 
 	/**
 	 * @return mixed
 	 */
 	public function create_options() {
 
-		if ( ! get_option( WC_BOM_OPTIONS ) ) {
-			add_option( WC_BOM_OPTIONS, [ 'init' => 'true' ] );
-		}
 		if ( ! get_option( WC_BOM_SETTINGS ) ) {
 			add_option( WC_BOM_SETTINGS, [ 'init' => 'true' ] );
 		}
-		//delete_option( 'wc_bom_settings' );
-		//delete_option( 'wc_bom_options' );
+
 	}
 
 	/**
@@ -331,9 +318,6 @@ class WC_Related_Products {
 		$args['columns']        = $cols; //change number of upsells here
 		///}
 
-		//ar_dump($args);
-		//var_dump( $limit );
-		//var_dump( $cols );
 
 		//woocommerce_cross_sell_display( $limit, $cols );
 		return $args;

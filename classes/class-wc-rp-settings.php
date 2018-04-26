@@ -394,6 +394,16 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     </td>
                 </tr>
                 <tr>
+	                <?php $label = 'Show random related products by category if none selected.'; ?>
+	                <?php $key = 'show_random_related'; ?>
+	                <?php $opt = $wc_bom_settings[ $key ]; ?>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
+                    <td><input type="checkbox" id="wc_bom_settings[<?php _e( $key ); ?>]"
+                               title="wc_bom_settings[<?php _e( $key ); ?>]"
+                               name="wc_bom_settings[<?php _e( $key ); ?>]"
+                               value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
+                </tr>
+                <tr>
 					<?php $label = 'Show Related'; ?>
 					<?php $key = $this->format_key( $label ); ?>
 					<?php $opt = $wc_bom_settings[ $key ]; ?>
