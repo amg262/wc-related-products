@@ -157,11 +157,11 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     <div id="poststuff">
 
                         <div id="post-body" class="metabox-holder columns-2">
-							<?php if ( $active_tab === 'all' || $active_tab === null ){
+							<?php if ( $active_tab === 'all' || $active_tab === null ) {
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
-                            } elseif ( $active_tab === 'related' || $active_tab === null ) {
+							} elseif ( $active_tab === 'related' || $active_tab === null ) {
 
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
@@ -351,7 +351,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 
 		// Enqueue Media Library Use
 		wp_enqueue_media();
-		var_dump( $wc_bom_settings ); ?>
+		//var_dump( $wc_bom_settings ); ?>
 
         <div id="postbox-container-2" class="postbox-container">
             <div id="normal-sortables" class="meta-box-sortables">
@@ -382,26 +382,16 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         <div id="wcrp-related">
             <table class="form-table">
                 <tbody>
-                <tr><?php $label = 'Header Text';
-					$key         = $this->format_key( $label );
-					$obj         = $wc_bom_settings[ $key ]; ?>
+                <tr>
+					<?php $label = 'Show random related products by category if none selected. ("Yes" or "No")' ?>
+					<?php $key = 'show_random_related'; ?>
+					<?php $opt = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td><input type="text"
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
                                value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                    </td>
-                </tr>
-                <tr>
-	                <?php $label = 'Show random related products by category if none selected.'; ?>
-	                <?php $key = 'show_random_related'; ?>
-	                <?php $opt = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="checkbox" id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="1"<?php checked( 1, $wc_bom_settings[ $key ], true ); ?> /></td>
                 </tr>
                 <tr>
 					<?php $label = 'Show Related'; ?>

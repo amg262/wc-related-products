@@ -131,7 +131,17 @@ class WC_Related_Products {
 			return false;
 		}
 
-		return 'none' === get_option( 'wc_rp_empty_behavior' ) ? false : $result;
+
+		/*$opts = get_option( 'wc_bom_settings' );
+
+		var_dump( $opts );
+		if ( $opts['show_random_related'] === 'No' ) {
+			return false;
+		} else {
+			return $result;
+		}*/
+
+		//return 'none' === get_option( 'wc_rp_empty_behavior' ) ? false : $result;
 	}
 
 	/**
@@ -275,6 +285,16 @@ class WC_Related_Products {
 	public function wc_output_related_products() {
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
+
+		var_dump( get_option( 'wc_rp_empty_behavior' ) );
+
+		$opts = get_option( 'wc_bom_settings' );
+
+		var_dump( $opts );
+		if ( $opts['show_random_related'] === 'No' ) {
+			return false;
+		}
+
 		if ( $is_active === true ) {
 			woocommerce_output_related_products();
 		}
