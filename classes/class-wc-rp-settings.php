@@ -40,7 +40,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 */
 	public function init() {
 
-		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ] );
+		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ], 99 );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'wco_admin' ] );
 		add_action( 'wp_ajax_wco_ajax', [ $this, 'wco_ajax' ] );
@@ -67,7 +67,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	public function wc_bom_menu() {
 
 		add_submenu_page(
-			'tools.php',
+			'woocommerce',
 			'Related Products',
 			'Related Products',
 			'manage_options',
@@ -382,8 +382,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         <div id="wcrp-related">
             <table class="form-table">
                 <tbody>
-                <tr>
-					<?php $label = 'Show random related products by category if none selected. ("Yes" or "No")' ?>
+
+				<?php /*$label = 'Show random related products by category if none selected. ("Yes" or "No")' ?>
 					<?php $key = 'show_random_related'; ?>
 					<?php $opt = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
@@ -391,8 +391,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                title="wc_bom_settings[<?php _e( $key ); ?>]"
                                id="wc_bom_settings[<?php _e( $key ); ?>]"
                                name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
-                </tr>
+                               value="<?php echo $wc_bom_settings[ $key ]; */ ?>
+
                 <tr>
 					<?php $label = 'Show Related'; ?>
 					<?php $key = $this->format_key( $label ); ?>

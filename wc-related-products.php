@@ -52,7 +52,7 @@ class WC_Related_Products {
 		//add_action('admin_init', [$this, 'del']);
 		add_action( 'init', [ $this, 'load_assets' ] );
 		add_action( 'admin_init', [ $this, 'create_options' ] );
-		add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
+		//add_action( 'admin_menu', [ $this, 'wc_rp_create_menu' ], 99 );
 
 		add_action( 'woocommerce_after_single_product_summary', [ $this, 'wc_output_related_products' ], $rp_prioirty );
 		//add_action( 'woocommerce_after_single_product_summary', 'replay_upsells', 15 );
@@ -286,11 +286,11 @@ class WC_Related_Products {
 		$opts      = get_option( WC_BOM_SETTINGS );
 		$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
 
-		var_dump( get_option( 'wc_rp_empty_behavior' ) );
+		//var_dump( get_option( 'wc_rp_empty_behavior' ) );
 
 		$opts = get_option( 'wc_bom_settings' );
 
-		var_dump( $opts );
+		//var_dump( $opts );
 		if ( $opts['show_random_related'] === 'No' ) {
 			return false;
 		}
@@ -313,6 +313,7 @@ class WC_Related_Products {
 
 		$total = isset( $opts['related_total'] ) ? (int) $opts['related_total'] : 4;
 		$cols  = isset( $opts['related_columns'] ) ? (int) $opts['related_columns'] : 4;
+
 
 		$args['posts_per_page'] = $total;
 		$args['columns']        = $cols;
