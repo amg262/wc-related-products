@@ -291,9 +291,9 @@ class WC_Related_Products {
 		$opts = get_option( 'wc_bom_settings' );
 
 		//var_dump( $opts );
-		if ( $opts['show_random_related'] === 'No' ) {
+		/*if ( $opts['show_random_related'] === 'No' ) {
 			return false;
-		}
+		}*/
 
 		if ( $is_active === true ) {
 			woocommerce_output_related_products();

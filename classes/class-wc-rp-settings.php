@@ -245,7 +245,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 
 		$prod = $_POST['product'];
 
-		var_dump( $_POST );
+		//var_dump( $_POST );
 		$args = [
 			'post_type'   => 'product',
 			'post_title'  => $prod,
