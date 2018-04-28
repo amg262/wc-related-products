@@ -40,8 +40,11 @@ class WC_Related_Products {
 	public function init() {
 
 
-		include_once __DIR__ . '/classes/class-wc-rp-settings.php';
+		include_once __DIR__ . '/classes/class-wcrp-settings.php';
+		include_once __DIR__ . '/classes/class-wcrp-post.php';
+		//include_once __DIR__.'/classes/functions.php';
 		$set  = WC_RP_Settings::getInstance();
+		$post = WC_RP_Post::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
 
