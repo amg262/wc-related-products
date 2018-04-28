@@ -22,10 +22,11 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 * @var null
 	 */
 	protected static $instance;
-	/**
-	 * @var null
-	 */
-	private $worker;
+
+	protected $wcrp_data = [];
+
+	protected $plugin_options = [];
+
 
 	/**
 	 * WC_Bom constructor.
@@ -38,7 +39,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public function init() {
+	protected function init() {
 
 		add_action( 'admin_menu', [ $this, 'wc_bom_menu' ], 99 );
 		add_action( 'admin_init', [ $this, 'page_init' ] );
@@ -98,7 +99,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		add_settings_section(
 			'wc_bom_setting', // ID
 			'', // Title
-			[ $this, 'build_settings' ], // Callback
+			[ $this, 'settings_callback' ], // Callback
 			'wc-bom-settings-admin' // Page
 		);
 
@@ -123,11 +124,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		global $wc_bom_settings;
 		$wc_bom_settings = get_option( WC_BOM_SETTINGS );
 
-		if ( isset( $_GET['tab'] ) ) {
-			$active_tab = $_GET['tab'];
-		} else {
-			$active_tab = 'settings';
-		}
+		$active_tab = ( isset( $_GET['tab'] ) ) ? $_GET['tab'] : 'all';
 
 		wp_enqueue_media(); ?>
 
@@ -140,15 +137,6 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                     <a id="wcrp-nav-all" href="#all" class="nav-tab
                     <?php echo $active_tab === 'all' ? 'nav-tab-active' : ''; ?>">All</a>
 
-                    <a id="wcrp-nav-related" href="#related" class="nav-tab
-                    <?php echo $active_tab === 'related' ? 'nav-tab-active' : ''; ?>">Related</a>
-
-                    <a id="wcrp-nav-upsells" href="#upsells" class="nav-tab
-                    <?php echo $active_tab === 'upsells' ? 'nav-tab-active' : ''; ?>">UpSells</a>
-
-                    <a id="wcrp-nav-crosssells" href="#crosssells" class="nav-tab
-                    <?php echo $active_tab === 'crosssells' ? 'nav-tab-active' : ''; ?>">CrossSells</a>
-
                     <a id="wcrp-nav-settings" href="#settings" class="nav-tab
                     <?php echo $active_tab === 'settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
                 </h2>
@@ -158,21 +146,6 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 
                         <div id="post-body" class="metabox-holder columns-2">
 							<?php if ( $active_tab === 'all' || $active_tab === null ) {
-								settings_fields( 'wc_bom_settings_group' );
-								do_settings_sections( 'wc-bom-settings-admin' );
-								submit_button( 'Save Settings' );
-							} elseif ( $active_tab === 'related' || $active_tab === null ) {
-
-								settings_fields( 'wc_bom_settings_group' );
-								do_settings_sections( 'wc-bom-settings-admin' );
-								submit_button( 'Save Settings' );
-							} elseif ( $active_tab === 'upsells' ) {
-
-								settings_fields( 'wc_bom_settings_group' );
-								do_settings_sections( 'wc-bom-settings-admin' );
-								submit_button( 'Save Settings' );
-
-							} elseif ( $active_tab === 'crosssells' ) {
 								settings_fields( 'wc_bom_settings_group' );
 								do_settings_sections( 'wc-bom-settings-admin' );
 								submit_button( 'Save Settings' );
@@ -194,8 +167,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public
-	function wco_admin() {
+	public function wco_admin() {
 
 
 		$ajax_data = $this->get_data();
@@ -205,21 +177,21 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 			'nonce'     => wp_create_nonce( 'ajax_nonce' ),
 			'ajax_data' => $ajax_data,
 			'action'    => [ $this, 'wco_ajax' ], //'options'  => 'wc_bom_option[opt]',
-			'product'   => $this->get_data(),
+			//'product'   => $this->get_data(),
 		];
 		wp_localize_script( 'bom_adm_js', 'ajax_object', $ajax_object );
-		/* Output empty div. */
 	}
 
-	/**
-	 * @return array
-	 */
-	public
-	function get_data() {
+
+	public function get_data() {
 
 		$args = [
-			'post_type'   => 'product',
-			'post_status' => 'publish',
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => - 1,
+			'orderby'        => 'title',
+			'order'          => 'ASC',
+
 		];
 
 		$out   = [];
@@ -235,8 +207,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 *
 	 */
-	public
-	function wco_ajax() {
+	public function wco_ajax() {
 
 		//global $wpdb;
 		check_ajax_referer( 'ajax_nonce', 'security' );
@@ -244,6 +215,8 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		}
 
 		$prod = $_POST['product'];
+
+		var_dump( $_POST );
 
 		//var_dump( $_POST );
 		$args = [
@@ -275,10 +248,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return array
 	 */
-	public
-	function sanitize(
-		$input
-	) {
+	public function sanitize( $input ) {
 
 		//$new_input = [];
 		//if ( isset( $input['license_key'] ) ) {
@@ -291,21 +261,19 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		return $input;
 	}
 
-	/**
-	 *
-	 */
-	public
-	function build_settings() {
-		$this->settings_sidebar();
-		$this->settings_callback();
-		//$this->settings_save();
-	}
 
 	/**
-	 *
+	 * Get the settings option array and print one of its values
 	 */
-	public
-	function settings_sidebar() { ?>
+	public function settings_callback() {
+
+		global $wc_bom_settings;
+		$wc_bom_settings = get_option( 'wc_bom_settings' );
+
+
+		// Enqueue Media Library Use
+		wp_enqueue_media();
+		var_dump( $wc_bom_settings ); ?>
         <div id="postbox-container-1" class="postbox-container">
 
             <div id="normal-sortables" class="meta-box-sortables">
@@ -336,23 +304,6 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                 </div>
             </div>
         </div>
-		<?php return;
-	}
-
-	/**
-	 * Get the settings option array and print one of its values
-	 */
-	public
-	function settings_callback() {
-
-		global $wc_bom_settings;
-		$wc_bom_settings = get_option( 'wc_bom_settings' );
-
-
-		// Enqueue Media Library Use
-		wp_enqueue_media();
-		//var_dump( $wc_bom_settings ); ?>
-
         <div id="postbox-container-2" class="postbox-container">
             <div id="normal-sortables" class="meta-box-sortables">
                 <div id="postbox" class="postbox">
@@ -373,8 +324,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	/**
 	 * @return string
 	 */
-	public
-	function settings_fields() {
+	protected function settings_fields() {
 		global $wc_bom_settings;
 
 		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
@@ -437,12 +387,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
                     </td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="wcrp-upsells">
-            <table class="form-table">
-                <tbody>
+
                 <tr>
 					<?php $label = 'Show UpSells'; ?>
 					<?php $key = $this->format_key( $label ); ?>
@@ -487,12 +432,7 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
                                value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
                     </td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
-        <div id="wcrp-crosssells">
-            <table class="form-table">
-                <tbody>
+
                 <tr>
 					<?php $label = 'Show CrossSells'; ?>
 					<?php $key = $this->format_key( $label ); ?>
@@ -542,46 +482,48 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
         <div id="wcrp-settings">
             <table class="form-table">
                 <tbody>
-                <tr>
-					<?php $label = 'Action';
+                <tr><?php $label = 'Copy Product Data';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="wcrp_prod_selection>"><?php _e( $label ); ?></label></th>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
                     <td>
-                    <span class="button primary" id="button_hit" name="button_hit">
-                        Generate Data
-                        </span>
-                        <select id="wcrp_prod_selection" name="wcrp_prod_selection"
-                                data-placeholder="Select Your Options"
+                        <select id="wc_bom_settings[<?php _e( $key ); ?>]" name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="wc_bom_settings[<?php _e( $key ); ?>]"
                                 class="prod-select chosen-select">
-							<?php //var_dump( $this->get_data() );
-
-							foreach ( $this->get_data() as $arr ) {
-
-								$id   = $arr['id'];
-								$text = $arr['text'];
-								$opts .= '<option id="' . $id . '" ' .
-								         'value="' . $text . '"">' .
-								         $text .
-								         '</option>';
-								echo $opts;
-							}
-							//var_dump( $opts ); ?>
+							<?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
                         </select>
-						<?php $label = 'Prod Bom'; ?>
-						<?php $key = $this->format_key( $label ); ?>
-						<?php $opt = $wc_bom_settings[ $key ]; ?>
-                        <input type="hidden"
-                               id="<?php _e( $key ); ?> "
-                               name="<?php _e( $key ); ?> "
-                               value="<?php echo $key; ?>"/>
+                    </td>
+                    <th>
+
+                    </th>
+                    <td>
+                        <div id="p_out" name="p_out"><span id="p_it" name="p_it">Hello there!</span></div>
+                    </td>
+                </tr>
+
+                <tr><?php $label = 'Paste Data Product';
+					$key         = $this->format_key( $label );
+					$obj         = $wc_bom_settings[ $key ]; ?>
+                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
+                    <td>
+                        <select id="wc_bom_settings[<?php _e( $key ); ?>]" name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select chosen-select">
+							<?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+
+                    </th>
+                    <td>
+                        <span class="button primary" id="button_hit" name="button_hit">Generate</span>
                     </td>
                 </tr>
                 <tr><?php ?>
                     <th scope="row"></th>
-                    <td>
-                        <span id="prod_output" name="prod_output"><strong>Prod</strong></span>
-                    </td>
+                    <td><span id="prod_output" name="prod_output"><strong>Prod</strong></span></td>
                 </tr>
                 </tbody>
             </table>
@@ -595,13 +537,25 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return string
 	 */
-	public
-	function format_key(
-		$text
-	) {
+	protected function format_key( $text ) {
 		$str = str_replace( [ '-', ' ' ], '_', $text );
 
 		return strtolower( $str );
 	}
 
+	protected function build_select_options( $data ) {
+		$option = '';
+
+		foreach ( $this->get_data() as $arr ) {
+			if ( $data === $arr['text'] ) {
+				$selected = 'selected="selected"';
+			} else {
+				$selected = '';
+			}
+			$option .= '<option id="' . $arr['id'] . '" value="' . $arr['text'] . '" ' . $selected . '">'
+			           . '<strong>' . $arr['id'] . '</strong>&nbsp;:&nbsp;' . substr( $arr['text'], 0, 40 ) . '</option>';
+		}
+
+		return $option;
+	}
 }

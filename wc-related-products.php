@@ -446,7 +446,6 @@ class WC_Related_Products {
 		return $actions;
 	}
 
-
 	/**
 	 *
 	 */

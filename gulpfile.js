@@ -28,7 +28,7 @@ var paths = {
   dist_css: 'dist/styles/',
   dist_img: 'dist/images/',
   includes: 'includes/',
-  classes: 'classes/',
+  classes: 'classes/*.php',
 };
 
 // Not all tasks need to use streams
@@ -83,7 +83,7 @@ gulp.task('unzip', function() {
 gulp.task('serve', function() {
 
   browserSync.init({
-    proxy: 'http://localhost/wasser/wp-admin/',
+    proxy: 'http://localhost/wordpress/wp-admin/',
   });
 
 });
@@ -93,7 +93,7 @@ gulp.task('watch', function() {
   //gulp.watch(paths.scripts, ["scripts"]);
   gulp.watch(paths.home).on('change', browserSync.reload);
   gulp.watch('gulpfile.js').on('change', browserSync.reload);
-  gulp.watch(paths.assets+'*').on('change', browserSync.reload);
+  gulp.watch(paths.assets + '*').on('change', browserSync.reload);
   //gulp.watch(paths.assets).on("", browserSync.reload);
   gulp.watch(paths.classes).on('change', browserSync.reload);
   gulp.watch(paths.includes).on('add', browserSync.reload);
