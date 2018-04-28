@@ -41,6 +41,8 @@ class WC_Related_Products {
 
 
 		include_once __DIR__ . '/classes/class-wc-rp-settings.php';
+		include_once __DIR__ . '/classes/class-wc-bom-post.php';
+		$post = WC_Bom_Post::getInstance();
 		$set  = WC_RP_Settings::getInstance();
 		$opts = get_option( WC_BOM_SETTINGS );
 
