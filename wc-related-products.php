@@ -311,8 +311,8 @@ class WC_Related_Products {
 		//$is_active = isset( $opts['show_related'] ) ? (bool) $opts['show_related'] : false;
 		////if ( $is_active === true ) {
 
-		$total = isset( $opts['related_total'] ) ? (int) $opts['related_total'] : 4;
-		$cols  = isset( $opts['related_columns'] ) ? (int) $opts['related_columns'] : 4;
+		$total = isset( $opts['related_total'] ) ?  $opts['related_total'] : 4;
+		$cols  = isset( $opts['related_columns'] ) ? $opts['related_columns'] : 4;
 
 
 		$args['posts_per_page'] = $total;

@@ -36,6 +36,18 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	}
 
 	/**
+	 * @return null
+	 */
+	public static function getInstance() {
+
+		if ( static::$instance === null ) {
+			static::$instance = new static;
+		}
+
+		return static::$instance;
+	}
+
+	/**
 	 *
 	 */
 	public function init() {
@@ -46,18 +58,6 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		add_action( 'wp_ajax_wco_ajax', [ $this, 'wco_ajax' ] );
 
 		//add_action( 'wp_ajax_nopriv_wco_ajax', [ $this, 'wco_ajax' ] );
-	}
-
-	/**
-	 * @return null
-	 */
-	public static function getInstance() {
-
-		if ( static::$instance === null ) {
-			static::$instance = new static;
-		}
-
-		return static::$instance;
 	}
 
 	/**
@@ -275,20 +275,78 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	 *
 	 * @return array
 	 */
-	public
-	function sanitize(
-		$input
-	) {
+	public function sanitize( $input ) {
 
-		//$new_input = [];
-		//if ( isset( $input['license_key'] ) ) {
-		//$new_input['license_key'] = sanitize_text_field( $input['license_key'] );
-		//}
 
-		//if ( isset( $input[ 'title' ] ) ) {
-		//	$new_input[ 'title' ] = sanitize_text_field( $input[ 'title' ] );
-		//}
-		return $input;
+		$new_input = [];
+		if ( isset( $input['show_related'] ) ) {
+
+			$new_input['show_related'] = (int) $input['show_related'];
+		} else {
+			$new_input['show_related'] = false;
+
+		}
+
+		if ( isset( $input['show_upsells'] ) ) {
+
+			$new_input['show_upsells'] = (int) ( $input['show_upsells'] );
+		} else {
+			$new_input['show_upsells'] = false;
+
+		}
+
+		if ( isset( $input['show_crosssells'] ) ) {
+
+			$new_input['show_crosssells'] = (int) ( $input['show_crosssells'] );
+		} else {
+			$new_input['show_crosssells'] = false;
+
+		}
+
+
+
+		if ( isset( $input['related_columns'] ) ) {
+			$new_input['related_columns'] = absint( $input['related_columns'] );
+		}
+
+		if ( isset( $input['related_total'] ) ) {
+			$new_input['related_total'] = absint( $input['related_total'] );
+		}
+
+		if ( isset( $input['related_priority'] ) ) {
+			$new_input['related_priority'] = absint( $input['related_priority'] );
+		}
+
+
+		if ( isset( $input['upsell_columns'] ) ) {
+			$new_input['upsell_columns'] = absint( $input['upsell_columns'] );
+		}
+
+		if ( isset( $input['upsell_total'] ) ) {
+			$new_input['upsell_total'] = absint( $input['upsell_total'] );
+		}
+
+		if ( isset( $input['upsell_priority'] ) ) {
+			$new_input['upsell_priority'] = absint( $input['upsell_priority'] );
+		}
+
+
+		if ( isset( $input['crosssell_columns'] ) ) {
+			$new_input['crosssell_columns'] = absint( $input['crosssell_columns'] );
+		}
+
+		if ( isset( $input['crosssell_total'] ) ) {
+			$new_input['crosssell_total'] = absint( $input['crosssell_total'] );
+		}
+
+		if ( isset( $input['crosssell_priority'] ) ) {
+			$new_input['crosssell_priority'] = absint( $input['crosssell_priority'] );
+		}
+
+
+		return $new_input;
+
+		//return $input;
 	}
 
 	/**
@@ -377,23 +435,14 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 	function settings_fields() {
 		global $wc_bom_settings;
 
-		$wc_bom_settings = get_option( 'wc_bom_settings' ); ?>
+		$wc_bom_settings = get_option( 'wc_bom_settings' );
+
+		var_dump( $wc_bom_settings ); ?>
 
         <div id="wcrp-related">
             <table class="form-table">
                 <tbody>
-
-				<?php /*$label = 'Show random related products by category if none selected. ("Yes" or "No")' ?>
-					<?php $key = 'show_random_related'; ?>
-					<?php $opt = $wc_bom_settings[ $key ]; ?>
-                    <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="text"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; */ ?>
-
-                <tr>
+ <tr>
 					<?php $label = 'Show Related'; ?>
 					<?php $key = $this->format_key( $label ); ?>
 					<?php $opt = $wc_bom_settings[ $key ]; ?>
@@ -418,25 +467,65 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+			                <?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="b3" value="3" <?php if ( $num === 2 ) {
+				                echo ' selected ';
+			                } ?> >2
+                            <option id="b3" value="3" <?php if ( $num === 3 ) {
+				                echo ' selected ';
+			                } ?> >3
+                            </option>
+                            <option id="b4" value="4" <?php if ( $num === 4 ) {
+				                echo ' selected ';
+			                } ?>>4
+                            </option>
+                            <option id="b5" value="5" <?php if ( $num === 5 ) {
+				                echo ' selected ';
+			                } ?>>5
+                            </option>
+			                <?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
 
-                <tr><?php $label = 'Related Priority';
-					$key         = $this->format_key( $label );
-					$obj         = $wc_bom_settings[ $key ]; ?>
+
+				<?php $label = 'Related Priority';
+				$key         = $this->format_key( $label );
+				$id          = WCB_PREFIX . $key;
+				?>
+                <tr>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+							<?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="15" value="15" <?php if ( $num === 15 ) {
+								echo ' selected ';
+							} ?> >15
+                            </option>
+                            <option id="20" value="20" <?php if ( $num === 20 ) {
+								echo ' selected ';
+							} ?>>20
+                            </option>
+                            <option id="25" value="25" <?php if ( $num === 25 ) {
+								echo ' selected ';
+							} ?>>25
+                            </option>
+							<?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>
@@ -468,23 +557,60 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+			                <?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="b3" value="3" <?php if ( $num === 2 ) {
+		                        echo ' selected ';
+	                        } ?> >2
+                            <option id="b3" value="3" <?php if ( $num === 3 ) {
+				                echo ' selected ';
+			                } ?> >3
+                            </option>
+                            <option id="b4" value="4" <?php if ( $num === 4 ) {
+				                echo ' selected ';
+			                } ?>>4
+                            </option>
+                            <option id="b5" value="5" <?php if ( $num === 5 ) {
+				                echo ' selected ';
+			                } ?>>5
+                            </option>
+			                <?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
 
                 <tr><?php $label = 'UpSell Priority';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
+
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+							<?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="15" value="15" <?php if ( $num === 15 ) {
+								echo ' selected ';
+							} ?> >15
+                            </option>
+                            <option id="20" value="20" <?php if ( $num === 20 ) {
+								echo ' selected ';
+							} ?>>20
+                            </option>
+                            <option id="25" value="25" <?php if ( $num === 25 ) {
+								echo ' selected ';
+							} ?>>25
+                            </option>
+							<?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
                 </tbody>
@@ -518,22 +644,61 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+			                <?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="b3" value="3" <?php if ( $num === 2 ) {
+				                echo ' selected ';
+			                } ?> >2
+                            <option id="b3" value="3" <?php if ( $num === 3 ) {
+				                echo ' selected ';
+			                } ?> >3
+                            </option>
+                            <option id="b4" value="4" <?php if ( $num === 4 ) {
+				                echo ' selected ';
+			                } ?>>4
+                            </option>
+                            <option id="b5" value="5" <?php if ( $num === 5 ) {
+				                echo ' selected ';
+			                } ?>>5
+                            </option>
+			                <?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
+
+
                 <tr><?php $label = 'CrossSell Priority';
 					$key         = $this->format_key( $label );
 					$obj         = $wc_bom_settings[ $key ]; ?>
+
                     <th scope="row"><label for="<?php _e( $key ); ?>"><?php _e( $label ); ?></label></th>
-                    <td><input type="number"
-                               title="wc_bom_settings[<?php _e( $key ); ?>]"
-                               id="wc_bom_settings[<?php _e( $key ); ?>]"
-                               name="wc_bom_settings[<?php _e( $key ); ?>]"
-                               value="<?php echo $wc_bom_settings[ $key ]; ?>"/>
+
+                    <td>
+                        <select id="<?php _e( $key ); ?>" style="width:100px;"
+                                name="wc_bom_settings[<?php _e( $key ); ?>]"
+                                data-placeholder="Select Product" value="wc_bom_settings[<?php _e( $key ); ?>]"
+                                class="prod-select wc_bom_select chosen-select">
+
+							<?php $num = (int) $wc_bom_settings[ $key ]; ?>
+                            <option id="15" value="15" <?php if ( $num === 15 ) {
+								echo ' selected ';
+							} ?> >15
+                            </option>
+                            <option id="20" value="20" <?php if ( $num === 20 ) {
+								echo ' selected ';
+							} ?>>20
+                            </option>
+                            <option id="25" value="25" <?php if ( $num === 25 ) {
+								echo ' selected ';
+							} ?>>25
+                            </option>
+							<?php _e( $this->build_select_options( $wc_bom_settings[ $key ] ), 'wc-related-products' ); ?>
+                        </select>
                     </td>
                 </tr>
                 </tbody>
@@ -604,4 +769,32 @@ class WC_RP_Settings {//implements WC_Abstract_Settings {
 		return strtolower( $str );
 	}
 
+	/**
+	 * @param $data
+	 *
+	 * @return string
+	 */
+	protected function build_select_options( $opt ) {
+		//$option = '';//var_dump( $data );
+
+
+		$option = (int) $opt;
+
+
+		$set = [ 15, 20, 25 ];
+
+
+		foreach ( $set as $s ) {
+
+			$selected = ( $s === $option ) ? 'selected' : '';
+
+
+			$option .= '<option id="' . $s . '" value="' . $s . '" ' . $selected . '">'
+			           . '' . $s . '</option>';
+
+
+		}
+
+		return $option;
+	}
 }
